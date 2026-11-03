@@ -1,2 +1,2 @@
 # CIDmulator
-Simuladores de la minicomputadoras cubanas CID 201/201-A/201-B
+Emuladores de la minicomputadoras cubanas CID 201, CID 201-A CID 201-B
