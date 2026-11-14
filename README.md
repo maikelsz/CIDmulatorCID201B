@@ -7,7 +7,8 @@ Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cub
 
 > Un homenaje ejecutable a una de las primeras computadoras diseñadas y fabricadas en América Latina.
 
-<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_[2].jpg" /></p>
+<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_2.jpg" /></p>
+https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_[2].jpg
 
 **Atención, este es un trabajo en progreso.**
 
