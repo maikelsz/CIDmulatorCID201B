@@ -1,7 +1,7 @@
 # CIDmulator-B
 # CID 201-B
 
-<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/CIDmulator-B_CID201_emulator.jpg" /></p>
+<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/CIDmulator-B_CID201-B_console.png" /></p>
 
 Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cubana **CID 201-B** (Centro de Investigación Digital, ICID, Cuba, 1973). Reproduce el segundo modelo, su conjunto de instrucciones LEN, su consola física y sus periféricos: teletipo RICOH-3000 y Consul-260 (teleimpresoras)  y lector y perforador de cinta. Inicia con algunos programas precargados.
 
