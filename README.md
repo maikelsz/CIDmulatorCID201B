@@ -7,13 +7,13 @@
 [![No Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)]()
 [![Language](https://img.shields.io/badge/lang-ES%20%7C%20EN-blue.svg)](#)
 
+**Atención, este es un trabajo en progreso.**
+
 Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cubana **CID 201-B** (Centro de Investigación Digital, ICID, Cuba, 1973). Reproduce el segundo modelo, su conjunto de instrucciones LEN, su consola física y sus periféricos: teletipo RICOH-3000 y Consul-260 (teleimpresoras)  y lector y perforador de cinta. Inicia con algunos programas precargados.
 
 > Un homenaje ejecutable a una de las primeras computadoras diseñadas y fabricadas en América Latina, y a sus creadores.
 
 <p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_2.jpg" /></p>
-
-**Atención, este es un trabajo en progreso.**
 
 ## Inicio rápido
 
