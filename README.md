@@ -1,7 +1,7 @@
 # CIDmulator-B
 # CID 201-B
 
-<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/CIDmulator-B_CID201-B_console.png" /></p>
+<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CIDmulator-B_CID201-B_console.png" /></p>
 
 [![Single File](https://img.shields.io/badge/single--file-HTML%2FCSS%2FJS-brightgreen.svg)](index.html)
 [![No Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)]()
