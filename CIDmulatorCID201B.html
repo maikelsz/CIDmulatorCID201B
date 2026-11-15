@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>CIDmulator CID 201-B v0.1.0</title>
+<title>CIDmulator CID 201-B v0.13.0</title>
 <style>
 
      /* =========================================================================
@@ -1732,6 +1732,38 @@
             height: 32px;
         }
 
+    /* Aviso flotante del cargador de programas (.lstb) */
+    .load-toast {
+        position: fixed;
+        right: 18px;
+        bottom: 62px;
+        z-index: 6000;
+        max-width: 380px;
+        padding: 10px 14px;
+        background: rgba(16, 24, 40, .97);
+        border: 1px solid #2a3a55;
+        border-left: 3px solid #e0a526;
+        border-radius: 5px;
+        box-shadow: 0 8px 24px rgba(0,0,0,.55);
+        color: #cfd6df;
+        font: 12px/1.45 'Courier New', monospace;
+        white-space: pre-line;
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+        transition: opacity .18s ease, transform .18s ease;
+    }
+
+        .load-toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .load-toast.error {
+            border-left-color: #f87171;
+            color: #f3b4b4;
+        }
+
 </style>
 </head>
 <body>
@@ -1782,8 +1814,8 @@
                         </div>
                         <div class="label-201b tiny" id="key-label" style="position:absolute; top:344px; left:6px; width:70px;">APAGADO</div>
 
-                        <div class="label-201b" style="position:absolute; top:250px; left:82px; width:64px;">ENLACE</div>
-                        <button class="btn-square-201b" id="btn-enlace" style="position:absolute; top:178px; left:82px;"></button>
+                        <div class="label-201b" title="Unidad de Enlace: interfaz de E/S con los periféricos" style="position:absolute; top:250px; left:82px; width:64px;">ENLACE</div>
+                        <button class="btn-square-201b" id="btn-enlace" title="Unidad de Enlace (ENLACE): enciende la comunicación con los periféricos" style="position:absolute; top:178px; left:82px;"></button>
 
                         <button class="btn-square-201b" id="btn-central" style="position:absolute; top:282px; left:82px;"></button>
                         <div class="label-201b" style="position:absolute; top:354px; left:82px; width:64px;">CENTRAL</div>
@@ -1802,8 +1834,8 @@
                             <span style="position:absolute; left:43px; width:22px; text-align:center; font-size:9px; color:#d0e0f8; font-weight:bold;">P</span>
                         </div>
 
-                        <div class="label-201b" style="position:absolute; top:4px; left:254px; width:44px;">ENLACE</div>
-                        <div style="position:absolute; top:22px; left:265px;"><div class="led-201b enlace" data-bit="0"></div></div>
+                        <div class="label-201b" title="Registro de Enlace (EN): acarreo y extensión del acumulador" style="position:absolute; top:4px; left:254px; width:44px;">EN</div>
+                        <div title="Registro de Enlace (EN)" style="position:absolute; top:22px; left:265px;"><div class="led-201b enlace" data-bit="0"></div></div>
 
                         <div class="label-with-lines" style="position:absolute; top:4px; left:314px; width:568px; padding:0 9px;">
                             <div class="label-line"></div>
@@ -1945,7 +1977,7 @@
                 </span>
                 <span class="sb-field" id="sb-state"><span class="lbl">Estado:</span><span id="st-state">APAGADO</span></span>
                 <span class="sb-periph">
-                    <button class="sb-icon-btn" id="btn-load" title="Cargar programa compilado (.lst)">
+                    <button class="sb-icon-btn" id="btn-load" title="Cargar programa compilado (.lstb)">
                         <svg viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="1.6">
                             <path d="M3 16 V6 a1 1 0 0 1 1-1 h4 l2 2 h9 a1 1 0 0 1 1 1 v2" /><!-- fondo + pestaña -->
                             <path d="M3 16 L6 9 H22 L19 16 Z" /><!-- tapa abierta -->
@@ -2005,7 +2037,7 @@
                         <svg viewBox="0 0 24 20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 3 Q8 2 12 5 Q16 2 21 3 L21 17 Q16 16 12 19 Q8 16 3 17 Z" /><line x1="12" y1="5" x2="12" y2="19" /></svg>
                     </button>
 
-                    <input type="file" id="load-lst-input" accept=".lst,.txt" style="display:none">
+                    <input type="file" id="load-lst-input" accept=".lstb" style="display:none">
                 </span>
             </div>
         </div>
@@ -2134,7 +2166,8 @@
                         <li>Gira la <b>Llave</b> (panel izquierdo) hacia arriba, a la posición <b>LISTA</b>.</li>
                         <li>Pulsa el botón verde <b>CENTRAL</b> para encender la computadora.</li>
                         <li>En la barra inferior, haz clic en el icono del <b>Teletipo</b>, el <b>Ricoh</b> o la <b>CODEC</b> para abrir un periférico.</li>
-                        <li>Pulsa la tecla <b>COMENZAR</b> (en la consola) para que la máquina empiece a ejecutar el programa que tiene en memoria.</li>
+                        <li>Para cargar un programa compilado, pulsa el icono de <b>carpeta</b> de la barra inferior y elige un archivo <b>.lstb</b>. La máquina queda en <b>ALTO</b>.</li>
+                        <li>Fija la dirección de inicio con los interruptores y pulsa <b>CONTINUAR</b>; después pulsa <b>COMENZAR</b> (en la consola) para ejecutar el programa.</li>
                         <li>Puedes ajustar la velocidad de ejecución en la barra inferior (1, 10, 100 o MAX).</li>
                     </ol>
 
@@ -2143,7 +2176,7 @@
                     <h4>Encendido y Seguridad</h4>
                     <ul>
                         <li><b>Llave:</b> En <b>APAGADO</b> todo se detiene. En <b>LISTA</b> la máquina funciona. En <b>BLOQUEO</b> los botones de la consola no responden (seguridad), pero los periféricos en modo LOCAL siguen funcionando.</li>
-                        <li><b>CENTRAL / ENLACE:</b> El botón CENTRAL enciende la CPU. El botón ENLACE enciende la comunicación con los periféricos (si está apagado, la CPU no "verá" al Consul, Ricoh o CODEC).</li>
+                        <li><b>CENTRAL / ENLACE:</b> El botón CENTRAL enciende la CPU. El botón ENLACE enciende la <b>Unidad de Enlace</b>, la interfaz con los periféricos (si está apagada, la CPU no "verá" al Consul, Ricoh o CODEC). No confundirla con el <b>Registro de Enlace (EN)</b>, el bit de acarreo del acumulador.</li>
                     </ul>
 
                     <h4>Ejecución de Programas</h4>
@@ -2169,6 +2202,15 @@
                         <li><b>CONTINUAR:</b> Carga los interruptores en el Contador de Programa (CP) y los de DATO/INSTRUCCIÓN en sus registros.</li>
                         <li><b>EJECUTAR:</b> Muestra en los LEDs de Memoria (RM) lo que hay escrito en la dirección actual.</li>
                         <li><b>ENTRADA A/B/C:</b> Arrancan programas de demostración preinstalados (Shift, Hola Mundo, Eco).</li>
+                    </ul>
+
+                    <h4>Carga de Programas Compilados (.lstb)</h4>
+                    <ul>
+                        <li>El icono de <b>carpeta</b> de la barra inferior abre un archivo <b>.lstb</b>. Solo se acepta esa extensión.</li>
+                        <li>Cada línea de datos lleva la <b>dirección</b> y la <b>palabra</b> en octal, separadas por coma, tabulador o espacios: <code>7600, 7140</code>. Las líneas que empiezan por <code>;</code> son comentarios.</li>
+                        <li>El <b>.lstb solo contiene memoria</b>: no incluye la dirección de inicio. Si la máquina está en ejecución, el cargador la detiene primero y la deja en <b>ALTO</b>.</li>
+                        <li>Después de cargar, fija el vector de inicio con los interruptores, pulsa <b>CONTINUAR</b> y luego <b>COMENZAR</b>.</li>
+                        <li>Ejemplo listo para usar: <b>EJEMPLOS/MONITOR_Ultima_Pagina_201B.lstb</b>, el monitor «Última Página» (memoria desde 7600).</li>
                     </ul>
 
                     <h3>Protección de Memoria</h3>
@@ -2199,10 +2241,11 @@
                     </ul>
 
                     <h4>3. Consola Decimal CODEC</h4>
-                    <p>Un teclado numérico con pantalla Nixie (dígitos naranjas).</p>
+                    <p>Un teclado numérico con pantalla Nixie (dígitos naranjas). «Decimal» es el nombre de la consola: no es una unidad aritmética decimal.</p>
                     <ul>
-                        <li>Permite introducir números octales y decimales de forma visual.</li>
-                        <li>Los botones <b>ALM</b> (Almacenar), <b>REC</b> (Recuperar) y <b>BOR</b> (Borrar) envían señales lógicas a la computadora.</li>
+                        <li>Las teclas <b>0-9</b> cargan el <b>Registro de Entrada (RE)</b> de 4 bits y activan el indicador <b>ID</b>. El programa lee el dígito con <b>TRA</b> y lo envía a la pantalla con <b>TAR</b>.</li>
+                        <li><b>TAR</b> desplaza el <b>Registro de Pantalla (RDP)</b> una posición a la izquierda y deposita el dígito en la posición derecha. El <b>Registro de Fracción Decimal (RFD)</b> tiene 8 bits: cada bit en 1 muestra un punto a la derecha de la posición correspondiente. <b>POS</b> pone el signo a 0 (más) y <b>PUS</b> lo pone a 1 (menos).</li>
+                        <li>Los botones <b>ALM</b> (Almacenar), <b>REC</b> (Recuperar) y <b>BOR</b> (Borrar) envían señales lógicas a la computadora. El monitor de demostración «Última Página» usa direcciones octales de 4 dígitos: en ese programa las teclas 8 y 9 se descartan, aunque el CODEC las registre en RE. El listado de la demo está en <b>EJEMPLOS/MONITOR_Ultima_Pagina_201B.len1</b>, con dirección, contenido y nemotécnico separados por tabuladores.</li>
                         <li>Las teclas <b>ENA, ENB, ENC</b> arrancan programas (igual que las teclas A, B, C de la consola). El botón <b>ALT</b> detiene la máquina.</li>
                     </ul>
 
@@ -2238,21 +2281,24 @@
                         <tr><td><b>7300</b></td><td>LAC</td><td>Limpia el Acumulador (AC = 0).</td></tr>
                         <tr><td><b>7004</b></td><td>IAC</td><td>Incrementa el Acumulador (AC = AC + 1).</td></tr>
                         <tr><td><b>7010</b></td><td>CAC</td><td>Complementa el Acumulador (invierte todos los bits).</td></tr>
-                        <tr><td><b>7440</b></td><td>LEN</td><td>Limpia el Enlace (EN = 0).</td></tr>
-                        <tr><td><b>7420</b></td><td>CEN</td><td>Complementa el Enlace (EN = ~EN).</td></tr>
+                        <tr><td><b>7440</b></td><td>LEN</td><td>Limpia el Registro de Enlace (EN = 0).</td></tr>
+                        <tr><td><b>7420</b></td><td>CEN</td><td>Complementa el Registro de Enlace (EN = ~EN).</td></tr>
                         <tr><td><b>74xx</b></td><td>RDx</td><td>Rota el AC y el EN a la derecha (x = 1, 2, 4 u 8 bits).</td></tr>
                         <tr><td><b>75xx</b></td><td>RIx</td><td>Rota el AC y el EN a la izquierda (x = 1, 2, 4 u 8 bits).</td></tr>
                         <tr><td><b>7201</b></td><td>ALT</td><td>Alto de Programa (detiene la máquina).</td></tr>
                         <tr><td><b>7220</b></td><td>SAN</td><td>Salta si el AC es negativo (bit 11 = 1).</td></tr>
                         <tr><td><b>7210</b></td><td>SAC</td><td>Salta si el AC es cero.</td></tr>
-                        <tr><td><b>7204</b></td><td>SED</td><td>Salta si el Enlace es 1.</td></tr>
+                        <tr><td><b>7204</b></td><td>SED</td><td>Salta si el Registro de Enlace (EN) es 1.</td></tr>
                         <tr><td><b>7202</b></td><td>SLT</td><td>Salto incondicional (omite la siguiente instrucción).</td></tr>
-                        <tr><td><b>762N</b></td><td>CCIN</td><td>Carga el campo N (0-7) en el Registro Nuevo de Instrucción (RNI).</td></tr>
+                        <tr><td><b>762N</b></td><td>CCIN</td><td>Carga el campo N (0-7) en el Registro Nuevo de Instrucción (RNI). Se aplica en la búsqueda siguiente.</td></tr>
                         <tr><td><b>761N</b></td><td>CCDN</td><td>Carga el campo N (0-7) en el Registro de Campo de Dato (RCD).</td></tr>
                         <tr><td><b>7660</b></td><td>CIN</td><td>Activa las interrupciones.</td></tr>
                         <tr><td><b>7650</b></td><td>DIN</td><td>Desactiva las interrupciones.</td></tr>
                         <tr><td><b>7700</b></td><td>VPP</td><td>Vuelve al Programa Principal (Salto indirecto a 0000).</td></tr>
                     </table>
+
+                    <h4>Direccionamiento indirecto (puente)</h4>
+                    <p>Una dirección de memoria se compone de <b>campo (3) + página (2) + offset (7)</b>: como 3+5+7 no cabe en una palabra de 12 bits, el puente alcanza las <b>4 primeras páginas</b> del módulo destino. El <b>campo del puente</b> es el que manda, y es lo que permite llamar a otro módulo y regresar. En <b>VAS(I)</b> y <b>VEA(I)</b> el campo de origen se guarda en <b>RVI</b>, y el del puente pasa a <b>RCI</b> y <b>RNI</b>. Los autoíndices 0010–0017 se incrementan <b>antes</b> de usarse como puente.</p>
 
                     <h4>Instrucciones de Entrada/Salida (E/S) - Código 6xxx</h4>
                     <p>La computadora se comunica con los periféricos a través de la Unidad de Enlace. Las instrucciones de E/S se agrupan según el dispositivo.</p>
@@ -2296,10 +2342,10 @@
                         <tr><td><b>6351</b></td><td>SIR</td><td>Salta si se presionó REC (IR = 1).</td></tr>
                         <tr><td><b>6302 a 6352</b></td><td>LID a LIR</td><td>Limpian los indicadores correspondientes.</td></tr>
                         <tr><td><b>6414</b></td><td>TRA</td><td>Transfiere el dígito de entrada (RE) al Acumulador (AC = AC OR RE).</td></tr>
-                        <tr><td><b>6434</b></td><td>TAR</td><td>Transfiere el Acumulador a la pantalla (AC -> RDP) y limpia el AC.</td></tr>
-                        <tr><td><b>6404</b></td><td>TAF</td><td>Transfiere el Acumulador al registro de fracción (puntos decimales).</td></tr>
-                        <tr><td><b>6410</b></td><td>POS</td><td>Pone la pantalla en positivo (+).</td></tr>
-                        <tr><td><b>6420</b></td><td>PUS</td><td>Pone la pantalla en negativo (-).</td></tr>
+                        <tr><td><b>6434</b></td><td>TAR</td><td>Desplaza el RDP una posición a la izquierda, deposita el dígito del AC en la posición derecha y limpia el AC.</td></tr>
+                        <tr><td><b>6404</b></td><td>TAF</td><td>Transfiere el AC al registro de fracción (puntos decimales) y limpia el AC.</td></tr>
+                        <tr><td><b>6410</b></td><td>POS</td><td>Pone a 0 el signo de la pantalla: más (+). No modifica el AC.</td></tr>
+                        <tr><td><b>6420</b></td><td>PUS</td><td>Pone a 1 el signo de la pantalla: menos (-). No modifica el AC.</td></tr>
                     </table>
 
                     <h5>Lector y Perforador de Cinta (Ricoh 3000)</h5>
@@ -2344,6 +2390,8 @@
   <div class="main-row" id="main-row-2"></div>
 </div>
 
+<div class="load-toast" id="load-toast" role="status" aria-live="polite"></div>
+
 <script>
     "use strict";
 
@@ -2357,6 +2405,7 @@
         switches: new Array(12).fill(false),
         switchesDato: new Array(3).fill(false),  // Interruptores físicos de DATO
         switchesInstr: new Array(3).fill(false), // Interruptores físicos de INSTRUCCION
+        // enlacePower = Unidad de Enlace (ENLACE); S.EN es el Registro de Enlace.
         power: false, running: false, enlacePower: false, state: 'APAGADO', mode: 0, altoType: null,
         protMode: 0, protCampo: [1, 1, 1], protZona: [1, 1, 1], violMem: false,
         faltaAlim: 1, // 1 = permite interrupción (arriba/medio), 0 = bloquea (abajo)
@@ -2397,10 +2446,10 @@
 
     const CODEC = {
         isOpen: false,
-        RE: 0,
-        RDP: [0, 0, 0, 0, 0, 0, 0, 0], // Registro de Pantalla (8 posiciones)
-        RFD: [0, 0, 0, 0, 0, 0, 0, 0], // Registro de Fracción Decimal
-        signo: '-',
+        RE: 0,                              // Registro de Entrada (4 bits): último dígito pulsado
+        RDP: [0, 0, 0, 0, 0, 0, 0, 0],     // Registro de Pantalla (8 posiciones de 4 bits)
+        RFD: [0, 0, 0, 0, 0, 0, 0, 0],     // Registro de Fracción Decimal (8 bits, un punto por posición)
+        signo: 0,                           // Signo de pantalla: 0 = más (+), 1 = menos (-)
         indicadores: { ID: 0, IA: 0, IF: 0, IS: 0, IB: 0, IR: 0 }
     };
 
@@ -2481,45 +2530,63 @@
         return ((f & 0x7) << 12) | (pg << 7) | off;
     }
 
+    /* Puente indirecto (doc 201-B, "Direccionamiento de memoria"):
+       campo(3) + página(5) + offset(7) = 15 bits no caben en una palabra de 12,
+       de modo que la partición real es  campo(3) + página(2) + offset(7).
+       El campo del puente es el que manda: es lo que permite llamar a otro
+       módulo y volver con RVI. */
+    function decodeBridge(b) {
+        return { campo: (b >> 9) & 0x7, pagina: (b >> 7) & 0x3, offset: b & 0x7F };
+    }
+
+    /* Zona de memoria de una dirección absoluta: los 3 bits altos de su página
+       (grupos de 4 páginas). PENDIENTE-DOC: la documentación fija la zona del
+       puente en "sus 3 bits más significativos", pero no describe el reparto
+       de las 32 páginas entre los 3 interruptores de ZONA. */
+    function zoneOf(abs) { return (abs >> 9) & 0x7; }
+
     function resolveAddress(instr, isDataOp) {
-	  const ind = (instr >> 8) & 1;
-	  const init = baseAddr(instr, isDataOp);
-	  if (!ind) return { addr: init, indirect: false };
+        const ind = (instr >> 8) & 1;
+        const init = baseAddr(instr, isDataOp);
+        if (!ind) return { addr: init, indirect: false };
 
-	  let pa = init;
-	  const lo = pa & 0xFFF;
-	  if (lo >= 0o10 && lo <= 0o17) S.memory[pa] = mask12(S.memory[pa] + 1);
+        let pa = init;
+        const lo = pa & 0xFFF;
+        if (lo >= 0o10 && lo <= 0o17) S.memory[pa] = mask12(S.memory[pa] + 1);
 
-	  const b = S.memory[pa] & 0xFFF;
-	  const np = (b >> 7) & 0x1F; // Página: 5 bits
-	  const no = b & 0x7F;        // Offset: 7 bits
-	  const op = (instr >> 9) & 0x7;
+        const b = S.memory[pa] & 0xFFF;
+        const { campo: nf, pagina: np, offset: no } = decodeBridge(b);
+        const op = (instr >> 9) & 0x7;
+        const addr = (nf << 12) | (np << 7) | no;
 
-	  // Protección de memoria para VAS Indirecto (op=4)
-	  if (!isDataOp && op === 4 && S.protMode) {
-		const destZona = (np >> 2) & 0x7; // 3 bits más significativos de la página
-		if (!checkProtection(S.RCI, destZona)) { // Se comprueba con RCI
-		  triggerViolation();
-		  return { addr: init, indirect: true, violation: true };
-		}
-	  }
+        // Protección (doc 331-332): ISC/DEL se comprueban contra RCD y VAS
+        // indirecto contra RCI; la zona son los 3 bits altos del puente.
+        if (S.protMode && (op === 2 || op === 3 || op === 4)) {
+            const campo = (op === 4) ? S.RCI : S.RCD;
+            if (!checkProtection(campo, nf)) {
+                triggerViolation();
+                return { addr: init, indirect: true, violation: true };
+            }
+        }
 
-	  // Actualización de registros para saltos indirectos (VEA I, VAS I)
-	  if (!isDataOp && (op === 4 || op === 5)) {
-		S.RVI = S.RCI;      // Guardar campo viejo
-		S.RCI = S.RNI;      // Cargar campo nuevo
-	  }
+        // VAS(I)/VEA(I): RVI guarda el campo de origen y RCI/RNI pasan al
+        // campo del puente, con lo que la ejecución continúa allí.
+        if (!isDataOp && (op === 4 || op === 5)) {
+            S.RVI = S.RCI;
+            S.RCI = nf;
+            S.RNI = nf;
+        }
 
-	  // El campo final depende del tipo de instrucción
-	  const f = isDataOp ? S.RCD : S.RCI;
-	  
-	  return { addr: ((f & 0x7) << 12) | (np << 7) | no, indirect: true };
-	}
+        return { addr, indirect: true, bridge: { campo: nf, pagina: np, offset: no } };
+    }
 
     function checkProtection(destField, destZona) {
         if (!S.protMode) return true;
-        if (destField < 3 && S.protCampo[destField] === 2) return false;
-        if (destZona < 3 && S.protZona[destZona] === 2) return false;
+        // Interruptor de 3 posiciones: 0 = '1' permite, 1 = '~' indiferente,
+        // 2 = '0' prohíbe (ver protPosChar).
+        const f = destField & 0x7, z = destZona & 0x7;
+        if (f < S.protCampo.length && S.protCampo[f] === 2) return false;
+        if (z < S.protZona.length && S.protZona[z] === 2) return false;
         return true;
     }
 
@@ -2555,19 +2622,27 @@
 
     function doCI() {
         S.vpp = false; S.icp = S.CP;
+        S.RCI = S.RNI & 0x7;                 // campo elegido (CCIN o el anterior)
         const fa = effectiveInstrAddr(); S.lastInstrAbs = fa;
         S.ir = S.memory[fa] & 0xFFF; S.RM = S.ir;
-        S.RNI = S.RCI; S.CP = mask12(S.CP + 1);
+        S.RNI = S.RCI;                       // por defecto, la siguiente sigue aquí
+        S.CP = mask12(S.CP + 1);
         const op = (S.ir >> 9) & 0x7, ind = (S.ir >> 8) & 1;
-        if (ind) { S.eff = null; S.cycle = 'CD'; }
+        // Las microinstrucciones y la E/S (op >= 6) se ejecutan en CM.
+        // CM vuelve a buscar la instrucción, así que no se consume la posición:
+        // el avance del CP lo hace doCM al ejecutarla.
+        if (op >= 6) { S.CP = mask12(S.CP - 1); S.eff = null; S.cycle = 'CM'; }
+        else if (ind) { S.eff = null; S.cycle = 'CD'; }
         else { S.eff = { addr: baseAddr(S.ir, op < 4), indirect: false }; S.cycle = (op === 5) ? 'CV' : 'CO'; }
     }
 
     function doCM() {
         S.vpp = false; S.icp = S.CP;
+        S.RCI = S.RNI & 0x7;                 // campo elegido (CCIN o el anterior)
         const fa = effectiveInstrAddr(); S.lastInstrAbs = fa;
         S.ir = S.memory[fa] & 0xFFF; S.RM = S.ir;
-        S.RNI = S.RCI; S.CP = mask12(S.CP + 1);
+        S.RNI = S.RCI;                       // por defecto, la siguiente sigue aquí
+        S.CP = mask12(S.CP + 1);
         const op = (S.ir >> 9) & 0x7;
         if (op === 7 && (S.ir & 0xFFF) === 0o7700) { S.vpp = true; S.cycle = 'CD'; return; }
         if (op === 6) handleIO(S.ir); else handleMicro(S.ir & 0xFFF);
@@ -2575,18 +2650,19 @@
     }
 
     function doCD() {
-        const op = (S.ir >> 9) & 0x7;
-        const irEff = S.vpp ? 0o5400 : S.ir;
-        S.eff = resolveAddress(irEff, S.vpp ? false : (op < 4));
+        const irEff = S.vpp ? 0o5400 : S.ir;   // VPP = VEA(I) 0000
+        const op = (irEff >> 9) & 0x7;
+        S.eff = resolveAddress(irEff, op < 4);
         if (S.eff.violation) return;
-        S.cycle = (op === 5 || S.vpp) ? 'CV' : 'CO';
+        S.cycle = (op === 5) ? 'CV' : 'CO';
     }
 
     function doCO() {
         const op = (S.ir >> 9) & 0x7, a = S.eff.addr;
-        if (S.protMode && (op === 2 || op === 3)) {
-            const destZona = (a >> 12) & 0x7;
-            if (!checkProtection(S.RCD, destZona)) { triggerViolation(); return; }
+        // Protección de escritura/lectura directa: campo RCD y zona según la
+        // página destino. En indirecto ya se comprobó en resolveAddress().
+        if (S.protMode && (op === 2 || op === 3) && !S.eff.indirect) {
+            if (!checkProtection(S.RCD, zoneOf(a))) { triggerViolation(); return; }
         }
         switch (op) {
             case 0: S.RM = S.memory[a] & 0xFFF; S.AC = mask12(S.AC & S.RM); break;
@@ -2600,7 +2676,7 @@
     }
 
     function doCV() { S.CP = S.eff.addr & 0xFFF; S.vpp = false; if (S.armed) scheduleNext(); }
-    function doINT1() { S.memory[(S.RCI << 12) | 0o7775] = S.CP; S.RVI = S.RNI; S.cycle = 'INT2'; }
+    function doINT1() { S.memory[(S.RCI << 12) | 0o7775] = S.CP; S.RVI = S.RCI; S.cycle = 'INT2'; }
     function doINT2() { S.CP = 0o7776; if (S.armed) scheduleNext(); }
 
     function stepCycle() {
@@ -2640,11 +2716,11 @@
             return;
         }
         if ((op & 0o400) && ((op & 0o200) === 0)) {
-            // 1. Control del Enlace (prioridad sobre las rotaciones si se combinan)
-            if (op & 0o040) { S.EN = 0; return; } // LEN (Limpia Enlace)
-            if (op & 0o020) { S.EN = S.EN ? 0 : 1; return; } // CEN (Complementa Enlace)
-            if (op === 0o7520) { S.EN = 1; return; } // PUE (Pone Enlace a 1)
-            if (op === 0o7540) { S.EN = 0; return; } // POE (Pone Enlace a 0)
+            // 1. Control del Registro de Enlace (EN); prioridad sobre las rotaciones
+            if (op & 0o040) { S.EN = 0; return; } // LEN (Limpia el Registro de Enlace)
+            if (op & 0o020) { S.EN = S.EN ? 0 : 1; return; } // CEN (Complementa el Registro de Enlace)
+            if (op === 0o7520) { S.EN = 1; return; } // PUE (Pone el Registro de Enlace a 1)
+            if (op === 0o7540) { S.EN = 0; return; } // POE (Pone el Registro de Enlace a 0)
 
             // 2. Rotaciones (RDx y RIx)
             // En la 201-B, el bit 0o100 indica rotación a la Izquierda (RI)
@@ -3037,33 +3113,30 @@
             case 0o6342: CODEC.indicadores.IB = 0; break; // LIB
             case 0o6352: CODEC.indicadores.IR = 0; break; // LIR
 
-            case 0o6404: // TAF
+            case 0o6404: // TAF: AC -> RFD, AC <- 0
+                // RFD tiene 8 bits; el bit 7 del AC corresponde a la posición 0
+                // (la más a la izquierda) y el bit 0 a la posición 7.
                 for (let i = 0; i < 8; i++) CODEC.RFD[i] = (S.AC >> (7 - i)) & 1;
                 S.AC = 0;
                 renderCodec();
                 break;
-            case 0o6410: // POS
-                CODEC.signo = '+';
-                S.AC = 0;
+            case 0o6410: // POS: 0 -> signo en pantalla (+)
+                CODEC.signo = 0;
                 renderCodec();
                 break;
-            case 0o6420: // PUS
-                CODEC.signo = '-';
-                S.AC = 0;
+            case 0o6420: // PUS: 1 -> signo en pantalla (-)
+                CODEC.signo = 1;
                 renderCodec();
                 break;
-            case 0o6414: // TRA
-                S.AC = mask12(S.AC | CODEC.RE);
+            case 0o6414: // TRA: RE OR AC -> AC
+                S.AC = mask12(S.AC | (CODEC.RE & 0xF));
                 break;
-            case 0o6434: { // TAR
-                let currentRDP = 0;
-                for (let i = 0; i < 8; i++) {
-                    currentRDP = (currentRDP << 3) | (CODEC.RDP[i] & 0x7);
-                }
-                let newRDP = ((currentRDP << 12) | (S.AC & 0xFFF)) & 0xFFFFFF;
-                for (let i = 0; i < 8; i++) {
-                    CODEC.RDP[i] = (newRDP >> ((7 - i) * 3)) & 0x7;
-                }
+            case 0o6434: { // TAR: AC -> RDP, desplaza a la izquierda, AC <- 0
+                // El dígito es el nibble bajo del AC. Antes de recibirlo,
+                // RDP se desplaza una posición a la izquierda; el dígito
+                // entra por la posición 7 (la más a la derecha).
+                for (let i = 0; i < 7; i++) CODEC.RDP[i] = CODEC.RDP[i + 1];
+                CODEC.RDP[7] = S.AC & 0xF;
                 S.AC = 0;
                 renderCodec();
                 break;
@@ -3632,11 +3705,26 @@
         }
     }
 
+    // Texto de la pantalla: un carácter por posición. El RDP guarda 4 bits
+    // por posición, pero la pantalla solo representa dígitos 0-9; cualquier
+    // valor fuera de ese rango se muestra en blanco.
+    function codecDisplayDigits() {
+        return CODEC.RDP.map(d => (d >= 0 && d <= 9) ? String(d) : ' ').join('');
+    }
+
+    function codecDisplayDots() {
+        return CODEC.RFD.map(b => b ? '.' : ' ').join('');
+    }
+
+    function codecDisplaySign() {
+        return CODEC.signo ? '-' : '+';
+    }
+
     function renderCodec() {
         const signEl = document.getElementById('codec-sign');
         if (!signEl) return;
 
-        signEl.textContent = CODEC.signo;
+        signEl.textContent = codecDisplaySign();
         signEl.style.opacity = S.power ? '1' : '0.15';
         signEl.style.textShadow = S.power ? '0 0 15px #ff6a00' : 'none';
 
@@ -3644,7 +3732,8 @@
             const d = document.getElementById('codec-d' + i);
             const dot = document.getElementById('codec-dot' + i);
             if (d) {
-                d.textContent = CODEC.RDP[i];
+                const v = CODEC.RDP[i];
+                d.textContent = (v >= 0 && v <= 9) ? String(v) : ' ';
                 if (!S.power) {
                     d.classList.add('dim');
                 } else {
@@ -3658,7 +3747,8 @@
     }
 
     function codecPressDigit(num) {
-        CODEC.RE = num & 7;
+        // RE es de 4 bits y registra el dígito completo (0-9).
+        CODEC.RE = num & 0xF;
         CODEC.indicadores.ID = 1;
     }
 
@@ -4562,6 +4652,175 @@
     }
 
     /* =========================================================================
+       11.6 CARGA DE PROGRAMAS COMPILADOS (.LSTB)
+       -------------------------------------------------------------------------
+       Formato mínimo: una línea por palabra con la dirección y el contenido en
+       octal. Se aceptan coma, tabulador o espacios como separadores:
+
+           7600, 7140, LAC LEN
+           7600<TAB>7140
+           7600 7140
+
+       El .lstb no define la dirección de inicio: solo el contenido de memoria.
+       La máquina queda en ALTO y el usuario fija el vector con los
+       interruptores, CONTINUAR y COMENZAR.
+       ========================================================================= */
+
+    function mostrarAvisoCarga(mensaje, esError) {
+        const el = document.getElementById('load-toast');
+        if (!el) return;
+        el.textContent = mensaje;
+        el.classList.toggle('error', !!esError);
+        el.classList.add('show');
+        if (mostrarAvisoCarga.timer) clearTimeout(mostrarAvisoCarga.timer);
+        mostrarAvisoCarga.timer = setTimeout(() => {
+            el.classList.remove('show');
+            mostrarAvisoCarga.timer = null;
+        }, esError ? 7000 : 5000);
+    }
+
+    function errorCarga(mensaje, codigo) {
+        const e = new Error(mensaje);
+        e.codigo = codigo;
+        return e;
+    }
+
+    function octalDe(texto) {
+        const t = String(texto == null ? '' : texto).trim().replace(/^0o/i, '');
+        return /^[0-7]+$/.test(t) ? parseInt(t, 8) : null;
+    }
+
+    function cargarLstbEnMemoria(texto) {
+        if (!S.memory) throw errorCarga('La memoria del emulador no está disponible.', 'MEMORIA');
+        if (!S.power) throw errorCarga('Encienda la CID 201-B (CENTRAL) antes de cargar: el encendido restablece la memoria.', 'APAGADA');
+
+        // Si la máquina está ejecutando, primero se detiene en ALTO. La carga
+        // nunca debe interrumpir una instrucción a medias ni arrancar sola.
+        const estabaEnMarcha = !!S.running;
+        if (estabaEnMarcha) halt('AD');
+
+        const lineas = String(texto == null ? '' : texto).split(/\r?\n/);
+        const palabras = new Map();
+        let pagina0 = 0;
+        let ignoradas = 0;
+        let duplicadas = 0;
+
+        for (let i = 0; i < lineas.length; i++) {
+            const linea = lineas[i].trim();
+            if (!linea) continue;
+
+            // Comentarios y cabeceras sin datos.
+            if (/^[;#/*]/.test(linea)) continue;
+
+            // Dos primeros campos: dirección y palabra. El resto de la línea
+            // se ignora; puede llevar nemotécnico y comentario.
+            const mDatos = linea.match(/^([^\s,;]+)\s*(?:[,\t]|\s+)\s*([^\s,;]+)/);
+            if (!mDatos) { ignoradas++; continue; }
+
+            const dirTxt = mDatos[1], palTxt = mDatos[2];
+            // Si la primera columna no empieza por dígitos es una cabecera.
+            if (!/^(?:0o)?[0-9]+$/i.test(dirTxt)) { ignoradas++; continue; }
+
+            const dir = octalDe(dirTxt);
+            if (dir === null) throw errorCarga(`Línea ${i + 1}: «${dirTxt}» no es una dirección octal válida.`, 'DIRECCION');
+            if (dir > 0o77777) throw errorCarga(`Línea ${i + 1}: la dirección ${dirTxt} supera 77777 (15 bits).`, 'DIRECCION');
+
+            const pal = octalDe(palTxt);
+            if (pal === null) throw errorCarga(`Línea ${i + 1}: «${palTxt}» no es una palabra octal válida.`, 'PALABRA');
+            if (pal > 0o7777) throw errorCarga(`Línea ${i + 1}: la palabra ${palTxt} supera 7777 (12 bits).`, 'PALABRA');
+
+            if (palabras.has(dir)) duplicadas++;
+            palabras.set(dir, pal);
+        }
+
+        if (!palabras.size) throw errorCarga('El archivo no contiene líneas «dirección, palabra» en octal.', 'VACIO');
+
+        // Validar todo antes de escribir: un archivo con errores no deja la
+        // memoria a medio cargar. Si hay direcciones repetidas, gana la última.
+        for (const [dir, pal] of palabras) {
+            S.memory[dir] = pal & 0xFFF;
+            if (dir <= 0o177) pagina0++;
+        }
+
+        if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+
+        // El cargador NO fija el vector de inicio: deposita la memoria, deja
+        // la máquina en ALTO y el usuario lo elige con los interruptores,
+        // CONTINUAR y COMENZAR. Solo se descartan los restos de ejecución.
+        S.ir = 0;
+        S.icp = 0;
+        S.eff = null;
+        S.cycle = 'CI';
+        S.armed = false;
+        S.running = false;
+        S.violMem = false;
+        if (S.power) { S.state = 'ALTO'; S.altoType = null; }
+
+        renderAll();
+        mmAfterStep();
+
+        return {
+            palabras: palabras.size,
+            pagina0,
+            ignoradas,
+            duplicadas,
+            detenida: estabaEnMarcha
+        };
+    }
+
+    window.cargarLstbEnMemoria = cargarLstbEnMemoria;
+
+    (function conectarCargadorLstb() {
+        const btn = document.getElementById('btn-load');
+        const inp = document.getElementById('load-lst-input');
+        if (!btn || !inp) { console.warn('CARGAR .LSTB: #btn-load / #load-lst-input no encontrados.'); return; }
+
+        btn.addEventListener('click', () => {
+            if (!S.power) {
+                mostrarAvisoCarga('Encienda la CID 201-B (CENTRAL) antes de cargar: el encendido restablece la memoria y las demos.', true);
+                return;
+            }
+            inp.click();
+        });
+
+        inp.addEventListener('change', (e) => {
+            const f = e.target.files && e.target.files[0];
+            if (!f) return;
+            if (!/\.lstb$/i.test(f.name || '')) {
+                mostrarAvisoCarga('Solo se aceptan archivos .lstb.', true);
+                e.target.value = '';
+                return;
+            }
+            const r = new FileReader();
+            r.onload = () => {
+                try {
+                    const res = cargarLstbEnMemoria(r.result);
+                    btn.classList.add('active');
+                    setTimeout(() => btn.classList.remove('active'), 600);
+                    let msg = `${res.palabras} palabra(s) cargada(s) en memoria.\n`;
+                    if (res.detenida) msg += 'La máquina estaba en ejecución: se detuvo en ALTO.\n';
+                    msg += 'La máquina queda en ALTO.\n';
+                    msg += 'El .lstb solo contiene memoria: no define la dirección de inicio.\n';
+                    msg += 'Fije el vector con los interruptores, pulse CONTINUAR y luego COMENZAR.';
+                    if (res.pagina0) msg += `\nAviso: ${res.pagina0} palabra(s) en página 0 (000-177).`;
+                    if (res.duplicadas) msg += `\n${res.duplicadas} dirección(es) repetida(s): se usó la última.`;
+                    if (res.ignoradas) msg += `\n${res.ignoradas} línea(s) sin datos ignorada(s).`;
+                    mostrarAvisoCarga(msg, false);
+                } catch (err) {
+                    console.error('Cargar .lstb:', err);
+                    mostrarAvisoCarga('Error al cargar: ' + err.message, true);
+                }
+                e.target.value = '';
+            };
+            r.onerror = () => {
+                mostrarAvisoCarga('No se pudo leer el archivo seleccionado.', true);
+                e.target.value = '';
+            };
+            r.readAsText(f, 'utf-8');
+        });
+    })();
+
+    /* =========================================================================
        12. INICIALIZACIÓN
        ========================================================================= */
     function loadPrograms() {
@@ -4622,10 +4881,13 @@
         S.memory[0o0607] = 0o5200; // VEA 0600 ; bucle
 
         // --- PROGRAMA "ÚLTIMA PÁGINA" (CODEC) - Página 31 (0o7600) ---
+        // Monitor octal de memoria. El teclado entrega un dígito de 4 bits en
+        // RE; el programa lo acumula como dígito octal (0-7) en RegNum y lo
+        // muestra con TAR, que desplaza el RDP una posición a la izquierda.
         // 7600
-        S.memory[0o7600] = 0o7200; // LAC
+        S.memory[0o7600] = 0o7140; // LAC LEN (AC = 0, EN = 0)
         S.memory[0o7601] = 0o5210; // VEA 7610
-        S.memory[0o7602] = 0o7200; // LAC
+        S.memory[0o7602] = 0o7140; // LAC LEN
         S.memory[0o7603] = 0o3237; // DEL 7637 (RECstate)
         S.memory[0o7604] = 0o5200; // VEA 7600
         S.memory[0o7605] = 0o0000; // RegNum
@@ -4640,13 +4902,13 @@
         S.memory[0o7614] = 0o0206; // YLO 7606 (maskH)
         S.memory[0o7615] = 0o7210; // SAC (¿AC == 0?)
         S.memory[0o7616] = 0o5202; // VEA 7602 (end)
-        S.memory[0o7617] = 0o7200; // LAC
+        S.memory[0o7617] = 0o7300; // LAC
         S.memory[0o7620] = 0o1205; // SUM 7605 (RegNum)
         S.memory[0o7621] = 0o7503; // RI3 (desplaza a la izq)
         S.memory[0o7622] = 0o0207; // YLO 7607 (maskL)
         S.memory[0o7623] = 0o6414; // TRA (RE OR AC -> AC)
-        S.memory[0o7624] = 0o4312; // VAS 7712 (display)
-        S.memory[0o7625] = 0o5202; // VEA 7602 (end)
+        S.memory[0o7624] = 0o5354; // VEA 7754 (validar y mostrar)
+        S.memory[0o7625] = 0o5202; // VEA 7602 (no se usa)
 
         // 7626 BORrar
         S.memory[0o7626] = 0o6341; // SIB
@@ -4655,7 +4917,7 @@
         S.memory[0o7631] = 0o1205; // SUM 7605 (RegNum)
         S.memory[0o7632] = 0o0207; // YLO 7607 (maskL)
         S.memory[0o7633] = 0o7403; // RD3 (desplaza a la der)
-        S.memory[0o7634] = 0o4312; // VAS 7712 (display)
+        S.memory[0o7634] = 0o4312; // VAS 7712 (display; vuelve a 7602)
         S.memory[0o7635] = 0o5202; // VEA 7602 (end)
         S.memory[0o7636] = 0o0000; // RECdir
         S.memory[0o7637] = 0o0000; // RECstate
@@ -4667,19 +4929,19 @@
         S.memory[0o7643] = 0o1237; // SUM 7637 (RECstate)
         S.memory[0o7644] = 0o7210; // SAC
         S.memory[0o7645] = 0o5253; // VEA 7653 (readAdr)
-        S.memory[0o7646] = 0o7200; // LAC
+        S.memory[0o7646] = 0o7300; // LAC
         S.memory[0o7647] = 0o1205; // SUM 7605 (RegNum)
         S.memory[0o7650] = 0o3236; // DEL 7636 (RECdir)
         S.memory[0o7651] = 0o7010; // CAC
         S.memory[0o7652] = 0o3237; // DEL 7637 (RECstate)
-        S.memory[0o7653] = 0o7200; // LAC
-        S.memory[0o7654] = 0o1636; // SUM I 7636 (RECdir)
-        S.memory[0o7655] = 0o4312; // VAS 7712 (display)
-        S.memory[0o7656] = 0o1236; // SUM 7636 (RECdir)
-        S.memory[0o7657] = 0o7004; // IAC
-        S.memory[0o7660] = 0o3236; // DEL 7636 (RECdir)
-        S.memory[0o7661] = 0o3264; // DEL 7664 (ALMstate)
-        S.memory[0o7662] = 0o5200; // VEA 7600 (init)
+        S.memory[0o7653] = 0o7300; // LAC
+        S.memory[0o7654] = 0o1636; // SUM I 7636 (RECdir): AC = [RECdir]
+        S.memory[0o7655] = 0o3205; // DEL 7605 (RegNum = valor leído)
+        S.memory[0o7656] = 0o3264; // DEL 7664 (ALMstate = 0; AC ya es 0)
+        S.memory[0o7657] = 0o2236; // ISC 7636 (RECdir++; si envuelve, salta el NOP)
+        S.memory[0o7660] = 0o7200; // NOP (destino del salto de ISC)
+        S.memory[0o7661] = 0o5314; // VEA 7714 (display desde RegNum)
+        S.memory[0o7662] = 0o7200; // no se usa: el display vuelve a 7602
         S.memory[0o7663] = 0o0000; // ALMdir
         S.memory[0o7664] = 0o0000; // ALMstate
 
@@ -4690,28 +4952,81 @@
         S.memory[0o7670] = 0o1264; // SUM 7664 (ALMstate)
         S.memory[0o7671] = 0o7210; // SAC
         S.memory[0o7672] = 0o5301; // VEA 7701 (write)
-        S.memory[0o7673] = 0o7200; // LAC
+        S.memory[0o7673] = 0o7300; // LAC
         S.memory[0o7674] = 0o1205; // SUM 7605 (RegNum)
         S.memory[0o7675] = 0o3263; // DEL 7663 (ALMdir)
         S.memory[0o7676] = 0o7010; // CAC
         S.memory[0o7677] = 0o3264; // DEL 7664 (ALMstate)
         S.memory[0o7700] = 0o5307; // VEA 7707 (endALM)
-        S.memory[0o7701] = 0o7200; // LAC
+        S.memory[0o7701] = 0o7300; // LAC
         S.memory[0o7702] = 0o1205; // SUM 7605 (RegNum)
         S.memory[0o7703] = 0o3663; // DEL I 7663 (ALMdir)
         S.memory[0o7704] = 0o1263; // SUM 7663 (ALMdir)
         S.memory[0o7705] = 0o7004; // IAC
         S.memory[0o7706] = 0o3263; // DEL 7663 (ALMdir)
         S.memory[0o7707] = 0o3237; // DEL 7637 (RECstate)
-        S.memory[0o7710] = 0o4312; // VAS 7712 (display)
+        S.memory[0o7710] = 0o4312; // VAS 7712 (display; vuelve a 7602)
         S.memory[0o7711] = 0o5200; // VEA 7600 (init)
 
         // 7712 display (subrutina)
-        S.memory[0o7712] = 0o0000; // slot retorno
-        S.memory[0o7713] = 0o3205; // DEL 7605 (RegNum)
-        S.memory[0o7714] = 0o1205; // SUM 7605 (RegNum)
-        S.memory[0o7715] = 0o6434; // TAR (Actualiza pantalla)
-        S.memory[0o7716] = 0o5712; // VEA I 7712 (CORREGIDO: Pag=1, Off=0o112)
+        // Recibe el valor en AC, lo guarda en RegNum y envía 8 dígitos
+        // octales al RDP: cuatro ceros a la izquierda y los cuatro dígitos
+        // de RegNum. Cada TAR desplaza el RDP una posición.
+        S.memory[0o7712] = 0o0000; // slot de VAS (el retorno del display es fijo)
+        S.memory[0o7713] = 0o3205; // DEL 7605 (RegNum = AC)
+        S.memory[0o7714] = 0o1205; // SUM 7605 (AC = RegNum)
+        S.memory[0o7715] = 0o3353; // DEL 7753 (temp = AC)
+        S.memory[0o7716] = 0o7440; // LEN
+        S.memory[0o7717] = 0o6434; // TAR (0)
+        S.memory[0o7720] = 0o6434; // TAR (0)
+        S.memory[0o7721] = 0o6434; // TAR (0)
+        S.memory[0o7722] = 0o6434; // TAR (0)
+        S.memory[0o7723] = 0o7300; // LAC
+        S.memory[0o7724] = 0o1353; // SUM 7753 (temp)
+        S.memory[0o7725] = 0o0206; // YLO 7606 (7000: grupo de bits 9-11)
+        S.memory[0o7726] = 0o7403; // RD3
+        S.memory[0o7727] = 0o7403; // RD3
+        S.memory[0o7730] = 0o7403; // RD3
+        S.memory[0o7731] = 0o6434; // TAR (dígito 1)
+        S.memory[0o7732] = 0o7300; // LAC
+        S.memory[0o7733] = 0o1353; // SUM 7753 (temp)
+        S.memory[0o7734] = 0o0370; // YLO 7770 (0700: grupo de bits 6-8)
+        S.memory[0o7735] = 0o7403; // RD3
+        S.memory[0o7736] = 0o7403; // RD3
+        S.memory[0o7737] = 0o6434; // TAR (dígito 2)
+        S.memory[0o7740] = 0o7300; // LAC
+        S.memory[0o7741] = 0o1353; // SUM 7753 (temp)
+        S.memory[0o7742] = 0o0371; // YLO 7771 (0070: grupo de bits 3-5)
+        S.memory[0o7743] = 0o7403; // RD3
+        S.memory[0o7744] = 0o6434; // TAR (dígito 3)
+        S.memory[0o7745] = 0o7300; // LAC
+        S.memory[0o7746] = 0o1353; // SUM 7753 (temp)
+        S.memory[0o7747] = 0o0352; // YLO 7752 (0007: grupo de bits 0-2)
+        S.memory[0o7750] = 0o6434; // TAR (dígito 4)
+        S.memory[0o7751] = 0o5202; // VEA 7602 (fin: el display vuelve al bucle)
+
+        // Máscaras de los grupos de 3 bits que no están en el bloque principal.
+        // 7770 y 7771 son octales válidos; 7768/7769 no existen en octal.
+        S.memory[0o7770] = 0o0700; // grupo de bits 6-8
+        S.memory[0o7771] = 0o0070; // grupo de bits 3-5
+        S.memory[0o7752] = 0o0007; // mask7
+        S.memory[0o7753] = 0o0000; // temp
+
+        // 7754 validación de dígito y actualización del display
+        // El monitor es octal: si RE trae el bit 3 (teclas 8 o 9), el
+        // candidato se descarta. El CODEC, en cambio, sí conserva 8/9 en RE.
+        S.memory[0o7754] = 0o3353; // DEL 7753 (temp = candidato)
+        S.memory[0o7755] = 0o7300; // LAC
+        S.memory[0o7756] = 0o6414; // TRA (AC = RE; comprueba solo el dígito nuevo)
+        S.memory[0o7757] = 0o0367; // YLO 7767 (0010)
+        S.memory[0o7760] = 0o7210; // SAC (¿bit 3 == 0?)
+        S.memory[0o7761] = 0o5366; // VEA 7766 (inválido)
+        S.memory[0o7762] = 0o7300; // LAC
+        S.memory[0o7763] = 0o1353; // SUM 7753
+        S.memory[0o7764] = 0o4312; // VAS 7712 (display; vuelve a 7602)
+        S.memory[0o7765] = 0o5202; // VEA 7602 (end)
+        S.memory[0o7766] = 0o5202; // VEA 7602 (inválido: descarta)
+        S.memory[0o7767] = 0o0010; // máscara del bit 3
 
         // --- VECTORES DE ARRANQUE ---
         S.memory[0o7775] = 0o0200; // A -> Shift
