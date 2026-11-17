@@ -134,7 +134,7 @@ La CID 201-B se utilizó en la industria azucarera, en la salud, en la educació
 
 <p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_manufactura1.jpg" alt="Manufactura de la CID 201-B" /></p>
 
-<p align="center"><img width="720" src="PICS/CID_201-B_ricoh3000.jpg" alt="Teletipo Ricoh 3000 asociado a la CID 201-B" /></p>
+<p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_ricoh3000.jpg" /></p>
 
 ### Qué modela este emulador
 
@@ -264,7 +264,7 @@ La memoria del emulador se comporta como una **memoria de ferrita**:
 
 ## Arquitectura
 
-<p align="center"><img width="720" src="PICS/CID_201-B_estructura.png" alt="Estructura funcional de la CID 201-B" /></p>
+<p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_estructura.png" /></p>
 
 ### Registros
 
@@ -826,8 +826,6 @@ Se ignoran las líneas vacías y los comentarios que empiezan por `;`, `#`, `//`
 
 Si la máquina estaba ejecutando, el cargador la detiene primero con un alto `AD`. El botón de carpeta se rechaza si la máquina está apagada.
 
-**Ejemplo listo para usar:** [`EJEMPLOS/MONITOR_Ultima_Pagina_201B.lstb`](EJEMPLOS/MONITOR_Ultima_Pagina_201B.lstb). Contiene el monitor «Última Página» con sus 128 palabras. También está disponible la extracción [`EJEMPLOS/MONITOR_Ultima_Pagina_201B.len1`](EJEMPLOS/MONITOR_Ultima_Pagina_201B.len1).
-
 > **Memoria de ferrita:** un `.lstb` cargado sobrevive a apagar y encender, pero **se pierde al pulsar reset `⟲`**, porque el reset recarga las demos de fábrica.
 
 ---
@@ -856,135 +854,6 @@ El campo **`PROT`** de la barra de estado resume la protección: `PERM`/`PROH`, 
 
 ---
 
-## Estructura del proyecto
-
-```text
-CID201B/
-├─ CID201B_17.html              versión activa (v0.17.0)
-├─ CID201B_16.html              versión anterior (v0.16.0)
-├─ CID201B_15.html              versión anterior (v0.15.0)
-├─ CIDmulatorCID201B.html       copia publicada (v0.17.0)
-├─ README.md
-├─ EJEMPLOS/
-│  ├─ MONITOR_Ultima_Pagina_201B.lstb
-│  └─ MONITOR_Ultima_Pagina_201B.len1
-├─ PICS/
-│  ├─ CIDmulator-B_CID201-B_console.png
-│  ├─ CID_201-B_0prototipo.jpg
-│  ├─ CID_201-B_1serie1.jpg
-│  ├─ CID_201-B_2.jpg
-│  ├─ CID_201-B_manufactura1.jpg
-│  ├─ CID_201-B_repara.jpg
-│  ├─ CID_201-B_ricoh3000.jpg
-│  └─ CID_201-B_estructura.png
-├─ TEST/
-│  ├─ CID201B-tests.html
-│  ├─ harness.js
-│  ├─ emulador-core.js
-│  ├─ README.md
-│  └─ tests/
-│     ├─ 00-autoprueba.js
-│     ├─ 01-memoria.js
-│     ├─ 02-puente.js
-│     ├─ 03-isa.js
-│     ├─ 04-proteccion.js
-│     ├─ 05-limites-errores.js
-│     ├─ 06-estado-entrada-salida.js
-│     ├─ 07-codec.js
-│     ├─ 08-lstb.js
-│     ├─ 09-ferrita-softreset.js
-│     ├─ 10-saltos-combinados.js
-│     ├─ 11-mapa-editable.js
-│     └─ 12-ayuda-proteccion.js
-├─ DOCwork/
-│  ├─ CHANGELOG.md
-│  ├─ TODO.md
-│  ├─ ANALISIS-direccionamiento-201B.md
-│  ├─ HITO-11.md … HITO-17.md
-│  └─ tools/
-│     ├─ asm201b.py
-│     └─ build_test_core.py
-├─ DOChistorico/
-│  └─ CID201B.md
-└─ DONE/                        versiones _10 a _14 y material histórico
-```
-
-- **`CID201B_17.html`** es la versión activa. No se sobrescribe: cada hito crea un archivo nuevo.
-- **`CIDmulatorCID201B.html`** es la copia publicada y está sincronizada con la **v0.17.0**, igual que `CID201B_17.html`.
-- **`DONE/`** conserva las versiones `_10` a `_14` y material de trabajo, incluida la versión histórica `CID201B [9gOKOK].html`.
-- El código fuente del monitor y su listado viven en `CIDcoder/CODE/LEN CID201B/`, fuera de esta carpeta.
-
----
-
-## Pruebas
-
-El banco de pruebas está en [`TEST/CID201B-tests.html`](TEST/CID201B-tests.html). Trabaja sobre el **núcleo real** del HTML, no sobre una copia de la lógica, y cada prueba restaura el estado de la máquina al terminar.
-
-### Cómo ejecutarlo
-
-**Como archivo local:** abre `CID201B/TEST/CID201B-tests.html` directamente en el navegador. El banco usa las copias incrustadas en `TEST/emulador-core.js` y muestra la etiqueta **copia incluida** junto al nombre del archivo. El botón **Ejecutar** vuelve a lanzar las pruebas sin `NetworkError`.
-
-**Por HTTP (recomendado para comparar versiones):**
-
-```powershell
-python -m http.server 8765 --directory "C:\USER\InfoCuba\CIDmulator"
-```
-
-Después abre:
-
-```text
-http://localhost:8765/CID201B/TEST/CID201B-tests.html
-```
-
-La página muestra el resultado por grupos, el número de comprobaciones y el detalle de cada fallo. También deja el resumen en `window.TEST_RESULTS` y lo escribe en la consola como `TESTJSON:{...}`.
-
-### Parámetros de la URL
-
-| Parámetro | Ejemplo | Efecto |
-|---|---|---|
-| `file` | `?file=../CID201B_13.html` | Ejecuta el banco contra otra versión |
-| `filter` | `?filter=puente` | Solo los grupos cuyo nombre contenga el texto |
-
-### Resultados actuales
-
-| Versión | Pruebas | Comprobaciones |
-|---|---|---|
-| **`CID201B_17.html`** | **123/123** | **518** |
-| `CID201B_16.html` | 98/123 | 518 |
-| `CID201B_15.html` | 98/123 | 518 |
-| `DONE/CID201B_14.html` | 86/123 | 500 |
-| `DONE/CID201B_13.html` | 77/123 | 430 |
-| `DONE/CID201B_12.html` | 67/123 | 398 |
-| `DONE/CID201B_11.html` | 61/123 | 362 |
-
-En `_17` no hay errores de consola. En `_16` y `_15` fallan 25 pruebas: 10 del puente 5+7 (grupo 02), 9 de la protección ternaria (grupo 04), 1 de los límites del puente (grupo 05), 1 del cambio de módulo con `CCIN`/`VAS(I)` (grupo 06) y 4 del monitor «Última Página» (grupo 07), incluida la recuperación consecutiva y las nuevas direcciones de `ALMdir`/`ALMstate`. En `_14` fallan además las 6 de saltos y las 6 del editor del mapa del hito 15; en `_13`, las 9 de ferrita y reset; en `_12`, las 10 del cargador `.lstb`; y en `_11`, las 10 del CODEC. Las versiones `_14` a `_10` se conservan en `DONE/`.
-
-### Grupos
-
-| Grupo | Contenido |
-|---|---|
-| `00` | Autoprueba del arnés |
-| `01` | Memoria y direccionamiento |
-| `02` | Puente indirecto y campos |
-| `03` | Repertorio de instrucciones |
-| `04` | Protección de memoria |
-| `05` | Límites y errores |
-| `06` | Estado, entrada y salida |
-| `07` | CODEC |
-| `08` | Cargador `.lstb` |
-| `09` | Ferrita y reset |
-| `10` | Saltos combinados, `SEC`, `PUE` y `ALT` |
-| `11` | Mapa de memoria editable |
-| `12` | Resumen `PROT`/`CAM`/`ZON` de la barra de estado |
-
-`TEST/emulador-core.js` contiene copias completas de `_17` y `_16`. Se regenera con:
-
-```powershell
-python DOCwork/tools/build_test_core.py
-```
-
----
-
 ## Notas técnicas
 
 ### Precisión de la emulación
@@ -1010,21 +879,6 @@ python DOCwork/tools/build_test_core.py
 - **La tecla `ALT` del CODEC** produce `AD` y la instrucción `ALT` (`7201`) produce `AP`; no hay más diferencias entre ambos altos.
 - **El orden de `RNI`/`RVI`** sigue la lectura de las páginas 11 y 13 del manual: `CCIN` prepara `RNI`, `VAS(I)` lo consume y `VPP` restaura `RVI`. La p. 11 y la tabla de la p. 13 se contradicen en si `VEA(I)` también consume `RNI`; el emulador adopta la lectura coherente con `VPP` y con el retorno entre módulos.
 
-### Decisiones de implementación
-
-- **`softReset()`** solo actúa con la máquina encendida; con la máquina apagada devuelve `false` y no cambia nada.
-- **`softReset()`** no toca el CODEC, el Ricoh ni el Consul.
-- **El cargador `.lstb`** no fija el vector de inicio y no modifica `CP`, `RCI`, `RCD`, `RNI` ni `RVI`.
-- **La memoria** es un `Uint16Array(32768)`; el apagado/encendido no la reinicializa.
-- **Las demos** solo se cargan al abrir la página y al pulsar reset.
-- **La edición del mapa** exige alimentación (`CENTRAL`); si la máquina ejecuta, la detiene en `AD`. Ver [`DOCwork/HITO-15.md`](DOCwork/HITO-15.md).
-- **La ayuda interna** usa pestañas (`Uso`, `Repertorio`, `Protección`, `UAB`, `Periféricos`) y muestra una sola sección a la vez.
-- **Los saltos del grupo 1** se decodifican con `SED`/`SAC`/`SAN` por OR y `SEC`/`SAD`/`SAP` por AND; `0o002` es el selector global del grupo.
-- **`SEC` (`7206`)** salta con `EN == 0` y **`PUE` (`7520`)** pone `EN = 1`, según la documentación corregida en el hito 15.
-- **El puente indirecto es 5 + 7**, no 3+2+7: la página (5 bits) y el offset (7 bits) caben en la palabra de 12 bits; el campo (3 bits) se toma de `RCD`/`RCI` y, en `VAS(I)`, de `RNI`. La dirección absoluta de 15 bits se forma fuera del puente. Ver [`DOCwork/HITO-17.md`](DOCwork/HITO-17.md).
-- **`VAS(I)` es la única instrucción que consume `RNI`**: guarda el campo de origen en `RVI` y pasa `RNI` a `RCI`. `VEA(I)` no toca ninguno de los dos y `VPP` restaura `RCI` desde `RVI`.
-- **En la protección**, cada interruptor de `CAMPO`/`ZONA` fija un bit del patrón: `1` exige 1, `0` exige 0 y `~` no importa. El resumen de la barra de estado se lee como `1 / ~ / 0`.
-
 ### Compatibilidad
 
 El emulador es un **único archivo HTML autocontenido** y no usa frameworks ni dependencias para ejecutar la máquina. La única petición externa es el **contador de visitas y visitantes** (Vercount), que se carga con `defer`; sin red, el contador queda en «Loading» y el emulador funciona igual. Funciona en navegadores modernos de escritorio.
@@ -1033,24 +887,9 @@ El emulador es un **único archivo HTML autocontenido** y no usa frameworks ni d
 
 ## Referencias
 
-- Documentación técnica de la CID 201-B, recopilación del proyecto: [`DOChistorico/CID201B.md`](DOChistorico/CID201B.md).
-- Extracto de libro sobre la CID 201-B aportado por el autor del proyecto (material de archivo sin datos bibliográficos completos).
 - O. Ramos y N. Blanco, *Diseño de Computadoras Digitales*, Editorial Científico Técnica, La Habana, 1988.
-- A. Ball-Llovera, «Arquitectura de la CID 201», *Bioingeniería y Física Médica Cubana*, Vol. 11, Núm. 1, enero-abril, pp. 13-18, 2010.
-- «Entrevista realizada al ingeniero Orlando Ramos, diseñador de la primera minicomputadora cubana con motivo del décimo aniversario de este importante logro», *CID: Electrónica y proceso de datos en Cuba*, Núm. 1, INSAC, Cuba, 1981.
-- J. M. Barruecos, «Fidel, la Universidad, la Ciencia y la Tecnología: origen y desarrollo de la Computación en Cuba», *Revista Cuba Socialista*, 4ta. época, No. 2, mayo-agosto 2016, pp. 21-25.
-- Intervención del Dr. Antonio Ball-Llovera Díaz en el acto del 40 Aniversario de la Primera Computadora Digital Cubana, CUJAE, abril de 2010.
-- Información extraída de un documento elaborado por el Ing. Ricardo Piñero, uno de los creadores de la primera computadora, marzo de 2019.
-- The Software Writing Group, *Introduction to programming PDP-8 family computers*, Small Computer Handbook Series, Digital Equipment Corporation, 1969.
-- *PDP-8/S Maintenance Manual*, Digital Equipment Corporation, 1967.
-- Documentación de trabajo del emulador: [`DOCwork/CHANGELOG.md`](DOCwork/CHANGELOG.md), [`DOCwork/HITO-11.md`](DOCwork/HITO-11.md), [`DOCwork/HITO-12.md`](DOCwork/HITO-12.md), [`DOCwork/HITO-13.md`](DOCwork/HITO-13.md), [`DOCwork/HITO-14.md`](DOCwork/HITO-14.md), [`DOCwork/HITO-15.md`](DOCwork/HITO-15.md), [`DOCwork/HITO-16.md`](DOCwork/HITO-16.md), [`DOCwork/HITO-17.md`](DOCwork/HITO-17.md).
-- Banco de pruebas: [`TEST/README.md`](TEST/README.md).
 
 ---
-
-## Licencia y agradecimientos
-
-Este repositorio **no incluye actualmente un archivo de licencia**. El código se distribuye como trabajo en progreso para preservación, estudio y experimentación. Los derechos sobre el emulador y sobre la documentación histórica pertenecen a sus autores. Si necesitas reutilizar el código, contacta con el autor del proyecto.
 
 ### Agradecimientos
 
