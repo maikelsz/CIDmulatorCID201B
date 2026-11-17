@@ -887,7 +887,45 @@ El emulador es un **único archivo HTML autocontenido** y no usa frameworks ni d
 
 ## Referencias
 
-- O. Ramos y N. Blanco, *Diseño de Computadoras Digitales*, Editorial Científico Técnica, La Habana, 1988.
+- “Auxiliar de la inteligencia”. Bohemia, 1 de febrero, 1974
+- “Las CID”. Verde Olivo, No. 42, 20 de octubre, 1974
+
+- P. Albuerne Valdés, N. Amorín Bernal, “Automatización del Control Técnico-Económico de las Refinerías de Azúcar”, Control Cibernética y Automatización, Vol. 9 Núm. 3, 1975, Cuba
+- L.Toledo, M. Guerrero, “Modificación de la ponchadora FTR. 3518.000 para su utilización con la computadora CID 201 en el procesamiento de datos en Medicina Nuclear”, Control Cibernética y Automatización, Vol. 9 Núm. 3, 1975
+
+- J. Vilimi, R. Montero, “Ensamblador ENSIMACC para la Computadora CID-201-B”, Control Cibernética y Automatización, Vol. 10 Núm. 1, 1976
+
+- J. Vilimi et al, “Estructura de un Sistema para el Control de Procesos Tecnológicos en Tiempo Real, con la minicomputadora CID-201B”, Control Cibernética y Automatización, Vol. 11 Núm. 1, 1977
+- E. Hernández Piloto, J. Ibarra, “Rutinas de Ayuda a la Puesta a Punto de Programas para la CID 201-B”, Control, Cibernética y Automatización Vol. 11 Núm. 2, 1977, Cuba
+- J. Vilimi et al, “Experiencias con el sistema de tiempo real para La CID-201B, desarrollado en el IMACC”, Control Cibernética y Automatización Vol. 11 Núm. 4, 1977
+- M. García Valdéz, A. Cruz Hernández, “Conversores análogo-digitales para la minicomputadora CID-201-B”, Revista Cubana de Admistración de Salud; 3(2): 205-212, abr.-jun. 1977, Cuba
+- P. López Guzmán, L. Gonzáles Penichet, “Utilización de las computadoras en el Instituto de Investigacion y Desarrollo”, Revista ICIDCA, Vol II, No. 1, 1977, Cuba
+
+- J. Quesada López, E. Cortina Migueles, “Acerca de la confección de una cinta Ascota 170 para una computadora CID 201B”, Economía y Desarrollo, Núm. 45 Ene-Feb, pp. 154-159, 1978, Cuba
+- D. M. Felipe, “Un Monitor para la CID 201-B”, Control Cibernética y Automatización Vol. 12 Núm. 3, 1978, Cuba
+- E. H. Rodríguez Martínez, “Programa general de consolidación para la computadora CID-201-B”, Control cibernética y automatización, Vol. 12 Núm. 4, 1978, Cuba
+- V. Trejo, M. Andino Zayas, “La supervisión y el control del proceso tecnológico de un central azucarero con la computadora digital CID-201B”, 41 Conferencia ATAC, 1978
+
+- L. Amador Barbán, M. Simón Martínez, “Sistema de conversión de ficheros”, Control Cibernética y Automatización, Vol. 13 Núm. 3, 1979, Cuba
+- L. Amador Barbán, M. Simón Martínez, “El paquete de programas “SORFUCID””, Control Cibernética y Automatización, Vol. 13 Núm. 4, 1979, Cuba
+
+- L. J. Carrasco, "РАЗВИТИЕ МАЛЫХ ЭВМ НА КУБЕ" (Development of minicomputers in Cuba), "Вычислительная техника социалистических стран" (Computer Technology of Socialist Countries), No. 8, pag.19–22, Estadistica, Moscú,1980.
+
+- E. Martínez Chiles, M. Silva Gutiérrez, “Simulación de la implementación de un sistema de control de la alimentación de caña utilizando la CID 201 B”, Centro Azúcar, Vol. 8 Núm. 3, septiembre-diciembre 1981
+
+- A. Casado Collado, N. Quintero Orquendo, S. Padilla Rodríguez, “La traducción de programas de computadoras aplicados a la especialidad de ingeniería civil. Máquinas IRIS 10 y CID 201B”, Ingeniería Civil, Vol. 33 Núm. 4, 1982, Cuba
+
+- P. E. Guerra Salazar, F. Chang Muman, “Interface de salida para la CID 201B”, Ingeniería Electrónica, Automática y Comunicaciones, Vol. 3 Núm. 3 Ene, 1983, ISPJAE, Cuba
+- G. Valdéz Pardo, A. Ureta Chaviano, “El sistema BASIC CID 201-B: un medio para la enseñanza asistida por computadora”. Revista Cubana de Educación Superior, Vol. 3 Núm. 2, pp 73-92, 1983
+- L. Blanco Baroto et al. “Algunos resultados de la utilización de la computadora CID-201B en la supervisión del proceso tecnológico del central Espartaco”. Memorias de la 43 conferencia ATAC, 1983, MINAZ, Cuba
+
+- A. Fernández, S. Equivel, E. Granum, L. Corrales, “Algoritmo para superponer programas en la CID-201-B”, Control Cibernética y Automatización, Vol. 20 Núm. 2, 1986, Cuba
+
+- M. Fonfria Atan, "Experiencias con el uso del Generador de Análisis Sintáctico (GAS) de la minicomputadora CID 201-B", CID: Electrónica y proceso de datos en Cuba, Núm. 15, 1987, INSAC, Cuba
+
+- O. Ramos y N. Blanco, Diseño de Computadoras Digitales, Editorial Científico Técnica, La Habana, 1988.
+- R. Rosendi Gonzáles, “Configuración CID 201-B”, 2da edición, Editorial Científico-Técnica, Cuba, 1988
+
 
 ---
 
