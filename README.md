@@ -701,31 +701,6 @@ El monitor es un programa de control de memoria que ocupa la **página 31** (`76
 | **REC** | Primera pulsación: fija la dirección inicial. Siguientes: lee y muestra direcciones consecutivas |
 | **`−` (SIGN)** | No se usa en este monitor |
 
-Secuencia verificada por las pruebas:
-
-```text
-5  → 00000005
-7  → 00000057
-8  → 00000057   (se descarta; RE = 8)
-BOR → 00000005
-ALM → ALMdir = 5, ALMstate = 7777, pantalla 00000000
-6  → 00000006
-ALM → memoria[5] = 6, ALMdir = 6
-```
-
-La recuperación consecutiva se comprueba con la propia página 31:
-
-```text
-7600 → 00007600
-REC  → 00007140   ([7600] = 7140), RECdir = 7601, RECstate = 7777
-REC  → 00005210   ([7601] = 5210), RECdir = 7602
-REC  → 00007140   ([7602] = 7140), RECdir = 7603
-```
-
-`REC` llama a la subrutina de display con `VAS 7712` y vuelve a `init`, no
-a `end`; así conserva `RECstate` entre pulsaciones. Un dígito nuevo, `BOR` o
-`ALM` sí pasan por `end` y reinician la secuencia.
-
 El display muestra **ocho dígitos**, con cuatro ceros a la izquierda y los cuatro dígitos octales del valor. El monitor no ejecuta direcciones con la tecla de signo: para ejecutar un programa hay que fijar el vector con los interruptores y usar **CONTINUAR** y **COMENZAR**.
 
 > **Limitación:** el monitor es octal y descarta las teclas `8` y `9`; el CODEC, en cambio, sí las conserva en `RE`. El parámetro `TAR` desplaza `RDP`, no `RFD`; esta decisión sigue marcada como `PENDIENTE-DOC`.
@@ -742,60 +717,13 @@ Al abrir la página se cargan las demos de fábrica:
 
 Programa corto que carga un valor en el acumulador y lo rota en un bucle. Las lámparas del `AC` muestran el desplazamiento.
 
-```text
-0200  7300   LAC
-0201  1210   SUM 0210
-0202  7401   RD1
-0203  5620   VEA I 0220
-0210  0007   constante 7
-0220  0202   puente a 0202
-```
-
 #### ENB — *Hola Mundo*
 
 Imprime `HOLA MUNDO` seguido de retorno de carro y avance de línea, en un bucle. Usa el Consul o el Ricoh, según el panel abierto, y las instrucciones `SIP` y `TAP`.
 
-```text
-0400  7200   —             (el listado lo anota como LAC; el núcleo lo trata como NOP)
-0401  1230   SUM 0430      AC ← AC + 0430 (dirección de la cadena)
-0402  3240   DEL 0440      guarda el puntero de la cadena
-0403  7200   —
-0404  1231   SUM 0431      AC ← AC − 12
-0405  3241   DEL 0441      guarda el contador de caracteres
-0406  7200   —
-0407  1640   SUM I 0440    lee el carácter apuntado por el puntero
-0410  6221   SIP           espera a que la impresora esté libre
-0411  5210   VEA 0410      repite la consulta mientras esté ocupada
-0412  6224   TAP           imprime el carácter y limpia el AC
-0413  7200   —
-0414  1240   SUM 0440      recupera el puntero
-0415  7004   IAC           lo incrementa
-0416  3240   DEL 0440      guarda el puntero actualizado
-0417  2241   ISC 0441      decrementa el contador
-0420  5206   VEA 0406      siguiente carácter
-0421  5200   VEA 0400      al terminar, reinicia
-...
-0450  0010   'H'
-0451  0017   'O'
-0452  0014   'L'
-0453  0001   'A'
-0454  0000   ' '
-0455  0015   'M'
-0456  0025   'U'
-0457  0016   'N'
-0460  0004   'D'
-0461  0017   'O'
-0462  0036   CR
-0463  0037   LF
-```
-
-El vector de arranque está en `7776 = 0400`.
-
-> **Detalle:** el listado de `loadPrograms()` comenta `7200` como `LAC`, pero el núcleo lo decodifica como `NOP`. La demo funciona porque el acumulador ya vale cero en esos puntos; `7300` sí es un `LAC` real.
-
 #### ENC — Monitor «Última Página»
 
-Se describe en la sección anterior. El vector de arranque está en `7777 = 7600`.
+Se describe en la sección anterior.
 
 #### Eco (sin tecla asignada)
 
