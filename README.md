@@ -1,7 +1,7 @@
 # CIDmulator-B
 
 
-<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CIDmulator-B_CID201-B_console.png" /></p>
+<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/CIDmulator-B_CID201-B_console.png" /></p>
 
 Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cubana **CID 201-B** (Centro de Investigación Digital, ICID, Cuba, 1973). Reproduce su palabra de 12 bits, la memoria de ferrita modular de hasta 32 Kpalabras, el direccionamiento por campo y página, la consola física, la Unidad de Enlace y los periféricos que el emulador implementa: las teleimpresoras **Consul 260** y **Ricoh 3000**, la consola decimal **CODEC** y los puntos de entrada/salida **X, Y y Z**. Inicia con varios programas de ejemplo precargados.
 
@@ -17,7 +17,7 @@ Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cub
 
 # CID 201-B
 
-<p align="center"><img width="960" src="PICS/CID_201-B_2.jpg" alt="CID 201-B histórica" /></p>
+<p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_2.jpg" /></p>
 
 **Atención: este es un trabajo en progreso.** El emulador no pretende reproducir todavía la totalidad de la configuración de la máquina real. Las secciones de [Periféricos](#periféricos) y [Notas técnicas](#notas-técnicas) detallan qué está implementado y qué queda pendiente.
 
@@ -66,8 +66,6 @@ No requiere instalación ni dependencias. Abre el archivo **`CID201B_17.html`** 
 Las teclas **ENA/ENB/ENC** del CODEC usan exactamente los mismos vectores.
 
 > **Nota:** el botón **ALT** del CODEC produce un **Alto Dinámico (`AD`)**; el **Alto de Programa (`AP`)** solo lo genera la instrucción `ALT` (`7201`) ejecutada por un programa. El programa *Eco* existe en `0600`, pero no está asignado a ninguna tecla.
-
-<p align="center"><img width="1280" src="PICS/CIDmulator-B_CID201-B_console.png" alt="Consola del emulador CID 201-B" /></p>
 
 ---
 
@@ -130,11 +128,11 @@ La configuración **BMX** de 1975 y la UAB ampliaron todavía más el alcance de
 
 La CID 201-B se utilizó en la industria azucarera, en la salud, en la educación y en la administración. El software incluía ensambladores, compiladores y lenguajes de alto nivel. Los sistemas operativos permitían procesar trabajos de forma individual o por lotes, con gestión de archivos, bibliotecas y programas de servicio.
 
-<p align="center"><img width="720" src="PICS/CID_201-B_0prototipo.jpg" alt="Prototipo de la CID 201-B" /></p>
+<p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_0prototipo.jpg" /></p>
 
-<p align="center"><img width="720" src="PICS/CID_201-B_1serie1.jpg" alt="Primera serie de la CID 201-B" /></p>
+<p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_1serie1.jpg" /></p>
 
-<p align="center"><img width="720" src="PICS/CID_201-B_manufactura1.jpg" alt="Manufactura de la CID 201-B" /></p>
+<p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_manufactura1.jpg" alt="Manufactura de la CID 201-B" /></p>
 
 <p align="center"><img width="720" src="PICS/CID_201-B_ricoh3000.jpg" alt="Teletipo Ricoh 3000 asociado a la CID 201-B" /></p>
 
