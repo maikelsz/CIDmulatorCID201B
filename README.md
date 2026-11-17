@@ -689,7 +689,7 @@ Tampoco están cableados los indicadores **FALTA ALIMENTACIÓN** y **OPERACIÓN 
 
 ## Monitor «Última Página»
 
-El monitor es un programa de control de memoria que ocupa la **página 31** (`7600`–`7777`). Se arranca con **ENC** o fijando `7600` con los interruptores, pulsando **CONTINUAR** y luego **COMENZAR**.
+El monitor es un programa de control de memoria. Se arranca con **ENC** o fijando `7600` con los interruptores, pulsando **CONTINUAR** y luego **COMENZAR**.
 
 ### Funcionamiento
 
