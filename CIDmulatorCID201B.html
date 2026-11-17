@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>CIDmulator CID 201-B v0.13.0</title>
+<title>CIDmulator CID 201-B v0.17.0</title>
 <style>
 
      /* =========================================================================
@@ -1127,6 +1127,23 @@
          box-shadow: 0 0 6px rgba(136,255,136,0.5);
      }
 
+     .mm-edit-input.invalid {
+         border-color: #ff6666;
+         color: #ffaaaa;
+         box-shadow: 0 0 6px rgba(255,102,102,0.6);
+     }
+
+     .mm-row.editing {
+         background: #1a3a1a;
+     }
+
+     .mm-hint {
+         color: #6a8ac0;
+         font-size: 10px;
+         line-height: 1.35;
+         padding: 2px 4px;
+     }
+
      /* =========================================================================
     6. BARRA DE ESTADO (INFERIOR)
     ========================================================================= */
@@ -1236,6 +1253,24 @@
              display: block;
          }
 
+         .sb-reset-btn {
+             width: 24px;
+             height: 24px;
+             font-size: 16px;
+             line-height: 1;
+             color: #ffd479;
+         }
+
+         .sb-reset-btn:hover {
+             color: #ffe8b0;
+         }
+
+         .sb-reset-btn:disabled {
+             opacity: .3;
+             cursor: not-allowed;
+             filter: none;
+         }
+
      /* =========================================================================
     7. PANEL DE AYUDA
     ========================================================================= */
@@ -1290,6 +1325,53 @@
          .help-title .ico {
              font-size: 18px;
          }
+
+     /* Pestañas de la Ayuda */
+     .help-tabs {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 4px;
+     }
+
+     .help-tab {
+         background: #0e1622;
+         color: #8ea6c4;
+         border: 1px solid #2a3a52;
+         border-radius: 3px;
+         padding: 4px 9px;
+         font-family: Arial, sans-serif;
+         font-size: 11px;
+         font-weight: bold;
+         cursor: pointer;
+     }
+
+         .help-tab:hover {
+             color: #cfe0f5;
+             border-color: #445d80;
+         }
+
+         .help-tab.active {
+             background: #f5f2e8;
+             color: #0a2a4a;
+             border-color: #0a0a0a;
+         }
+
+         .help-tab:focus-visible {
+             outline: 2px solid #88aaff;
+             outline-offset: 1px;
+         }
+
+     .help-content[data-help-panel]:not(.active) {
+         display: none;
+     }
+
+     .help-note {
+         background: #fff3cd;
+         color: #5a4300;
+         border: 1px solid #d9b34a;
+         border-radius: 3px;
+         padding: 6px 8px;
+     }
 
      /* Contenido de la Ayuda (Tipografía Interna) */
      .help-content {
@@ -1763,6 +1845,25 @@
             border-left-color: #f87171;
             color: #f3b4b4;
         }
+     #visit-counter-container {
+         align-self: flex-start;
+         margin-left: 20px;
+         margin-top: -6px;
+         font-family: 'Courier New', monospace;
+         font-size: 11px;
+         color: #8899aa;
+         letter-spacing: 0.5px;
+         opacity: 0.8;
+         text-align: left;
+         user-select: text;
+     }
+     #visit-counter-container a {
+         color: #aac8ff;
+         text-decoration: none;
+     }
+     #visit-counter-container a:hover {
+         text-decoration: underline;
+     }
 
 </style>
 </head>
@@ -1949,8 +2050,9 @@
                 </div>
             </div>
 
-            <!-- Barra de estado: EN antes de AC; Ciclo antes que Modo -->
+            <!-- Barra de estado: reset a la izquierda; EN antes de AC; Ciclo antes que Modo -->
             <div class="status-bar">
+                <button class="sb-icon-btn sb-reset-btn" id="btn-soft-reset" title="Reset: inicializa memoria y registros; deja la máquina en ALTO DINÁMICO. Conserva los interruptores.">⟲</button>
                 <span class="sb-field" id="sb-en"><span class="lbl">EN:</span><span id="st-en">0</span></span>
                 <span class="sb-field" id="sb-ac"><span class="lbl">AC:</span><span id="st-ac">0000</span></span>
                 <span class="sb-field" id="sb-rm"><span class="lbl">RM:</span><span id="st-rm">0000</span></span>
@@ -1959,6 +2061,8 @@
                 <span class="sb-field" id="sb-rci"><span class="lbl">RCI:</span><span id="st-rci">0</span></span>
                 <span class="sb-field" id="sb-rni"><span class="lbl">RNI:</span><span id="st-rni">0</span></span>
                 <span class="sb-field" id="sb-rvi"><span class="lbl">RVI:</span><span id="st-rvi">0</span></span>
+                <span class="sb-field" id="sb-sw-dato" title="Interruptores de DATO (3 bits)"><span class="lbl">DATO:</span><span id="st-sw-dato">0</span></span>
+                <span class="sb-field" id="sb-sw-instr" title="Interruptores de INSTRUCCIÓN (3 bits)"><span class="lbl">INSTR:</span><span id="st-sw-instr">0</span></span>
                 <span class="sb-field" id="sb-sw"><span class="lbl">SW:</span><span id="st-sw">0000</span></span>
                 <span class="sb-field" id="sb-cycle"><span class="lbl">Ciclo:</span><span id="st-cycle">AD</span></span>
                 <span class="sb-field" id="sb-prot">
@@ -2157,7 +2261,14 @@
         <div class="help-panel is-hidden" id="help-panel">
             <div class="help-inner">
                 <div class="help-title"><span class="ico">📖</span> AYUDA</div>
-                <div class="help-content">
+                <div class="help-tabs" role="tablist" aria-label="Secciones de la ayuda">
+                    <button class="help-tab active" id="help-tab-uso" role="tab" aria-selected="true" aria-controls="help-panel-uso" data-help-tab="uso">Uso</button>
+                    <button class="help-tab" id="help-tab-repertorio" role="tab" aria-selected="false" aria-controls="help-panel-repertorio" data-help-tab="repertorio">Repertorio</button>
+                    <button class="help-tab" id="help-tab-proteccion" role="tab" aria-selected="false" aria-controls="help-panel-proteccion" data-help-tab="proteccion">Protección</button>
+                    <button class="help-tab" id="help-tab-uab" role="tab" aria-selected="false" aria-controls="help-panel-uab" data-help-tab="uab">UAB</button>
+                    <button class="help-tab" id="help-tab-perifericos" role="tab" aria-selected="false" aria-controls="help-panel-perifericos" data-help-tab="perifericos">Periféricos</button>
+                </div>
+                <div class="help-content active" id="help-panel-uso" role="tabpanel" aria-labelledby="help-tab-uso" data-help-panel="uso">
                     <h3>Bienvenido al Simulador de la CID 201-B</h3>
                     <p>Este es un emulador interactivo de la minicomputadora cubana <b>CID 201-B</b> (1973). Aquí puedes programar a bajo nivel, usar los periféricos originales y experimentar cómo funcionaba la informática de los años 70.</p>
 
@@ -2179,6 +2290,13 @@
                         <li><b>CENTRAL / ENLACE:</b> El botón CENTRAL enciende la CPU. El botón ENLACE enciende la <b>Unidad de Enlace</b>, la interfaz con los periféricos (si está apagada, la CPU no "verá" al Consul, Ricoh o CODEC). No confundirla con el <b>Registro de Enlace (EN)</b>, el bit de acarreo del acumulador.</li>
                     </ul>
 
+                    <h4>Memoria de Ferrita, Encendido y Reset</h4>
+                    <ul>
+                        <li>La memoria es de <b>núcleos de ferrita</b>: conserva su contenido al apagar y volver a encender la computadora. El encendido no recarga las demos.</li>
+                        <li>Las demos de fábrica se cargan al abrir el emulador. El botón <b>⟲</b> de la barra de estado hace un <b>reset</b>: inicializa la memoria con esas demos, limpia todos los registros y deja la máquina en <b>ALTO DINÁMICO (AD)</b>.</li>
+                        <li>El reset <b>conserva la posición y el estado de los interruptores</b>, incluidos SW, DATO e INSTRUCCIÓN. Un programa <b>.lstb</b> cargado se pierde al pulsar ⟲.</li>
+                    </ul>
+
                     <h4>Ejecución de Programas</h4>
                     <ul>
                         <li>
@@ -2191,7 +2309,7 @@
                         </li>
                         <li><b>PULSO:</b> Avanza la máquina en modo CICLO o PASO. Si la máquina está en Alto (detenida), este botón la reanuda.</li>
                         <li><b>COMENZAR:</b> Inicia la ejecución desde la dirección actual de la memoria.</li>
-                        <li><b>ALTO:</b> Detiene la máquina inmediatamente. La luz roja indicará si fue un alto normal (D) o por un error de programa (P).</li>
+                        <li><b>ALTO:</b> Detiene la máquina inmediatamente en <b>Alto Dinámico (AD)</b>. Las lámparas D y P del panel indican el tipo de alto; el <b>Alto de Programa (AP)</b> solo lo produce la instrucción ALT (7201).</li>
                     </ul>
 
                     <h4>Carga Manual de Datos (Los Interruptores)</h4>
@@ -2201,7 +2319,7 @@
                         <li><b>DEPOSITAR:</b> Escribe el valor de los 12 interruptores en la memoria (e incrementa el CP).</li>
                         <li><b>CONTINUAR:</b> Carga los interruptores en el Contador de Programa (CP) y los de DATO/INSTRUCCIÓN en sus registros.</li>
                         <li><b>EJECUTAR:</b> Muestra en los LEDs de Memoria (RM) lo que hay escrito en la dirección actual.</li>
-                        <li><b>ENTRADA A/B/C:</b> Arrancan programas de demostración preinstalados (Shift, Hola Mundo, Eco).</li>
+                        <li><b>ENTRADA A/B/C:</b> Arrancan programas de demostración preinstalados: <i>Shift</i>, <i>Hola Mundo</i> y el monitor <i>Última Página</i>.</li>
                     </ul>
 
                     <h4>Carga de Programas Compilados (.lstb)</h4>
@@ -2210,16 +2328,108 @@
                         <li>Cada línea de datos lleva la <b>dirección</b> y la <b>palabra</b> en octal, separadas por coma, tabulador o espacios: <code>7600, 7140</code>. Las líneas que empiezan por <code>;</code> son comentarios.</li>
                         <li>El <b>.lstb solo contiene memoria</b>: no incluye la dirección de inicio. Si la máquina está en ejecución, el cargador la detiene primero y la deja en <b>ALTO</b>.</li>
                         <li>Después de cargar, fija el vector de inicio con los interruptores, pulsa <b>CONTINUAR</b> y luego <b>COMENZAR</b>.</li>
+                        <li>El reset <b>⟲</b> reinicializa la memoria y borra el programa cargado; el apagado y encendido, en cambio, la conservan.</li>
                         <li>Ejemplo listo para usar: <b>EJEMPLOS/MONITOR_Ultima_Pagina_201B.lstb</b>, el monitor «Última Página» (memoria desde 7600).</li>
                     </ul>
 
-                    <h3>Protección de Memoria</h3>
-                    <p>Evita que un programa de usuario sobrescriba áreas críticas del sistema.</p>
+                    <h3>Mapa de Memoria</h3>
+                    <p>Haz clic en el icono del mapa (barra inferior) para ver la memoria de 32K (8 módulos de 4K).</p>
                     <ul>
-                        <li><b>PERMITE / PROHIBE:</b> Enciende o apaga el sistema de protección.</li>
-                        <li><b>CAMPO / ZONA:</b> Elige qué zonas de memoria (módulos 0, 1 y 2) están protegidas. Si una instrucción intenta escribir donde no debe, el LED <b>VIOLMEM</b> se encenderá y el programa se detendrá.</li>
+                        <li>Puedes <b>editar</b> cualquier celda haciendo clic sobre su valor octal. Se aceptan de 1 a 4 dígitos del 0 al 7. <b>Enter</b> guarda y pasa a la celda siguiente; <b>Tab</b> guarda y avanza; <b>Esc</b> cancela. Un valor con dígitos 8 o 9 se rechaza y se marca en rojo.</li>
+                        <li>Para escribir en memoria, la máquina debe estar encendida con <b>CENTRAL</b>. Si está ejecutando, la edición la detiene en <b>ALTO DINÁMICO (AD)</b>.</li>
+                        <li>La opción <b>Seguimiento</b> hace que la vista se desplace automáticamente para mostrar la instrucción que se está ejecutando.</li>
                     </ul>
+                </div>
 
+                <div class="help-content" id="help-panel-proteccion" role="tabpanel" aria-labelledby="help-tab-proteccion" data-help-panel="proteccion">
+                    <h3>Protección de Memoria</h3>
+                    <p>Evita que un programa de usuario sobrescriba áreas críticas del sistema. Como indica el manual de 1978, se comprueba solo en los accesos <b>indirectos</b> de <b>ISC</b>, <b>DEL</b> y <b>VAS</b>: la CPU compara el campo destino (RCD en ISC/DEL, y RNI en VAS) con el patrón de <b>CAMPO</b>, y los 3 bits más significativos del puente con el patrón de <b>ZONA</b>.</p>
+                    <p>Si el acceso está prohibido, se enciende el LED <b>VIOLMEM</b> y la máquina pasa a <b>ALTO</b>. Las lámparas D y P indican el tipo de alto según el estado de interrupción.</p>
+
+                    <h4>Interruptores</h4>
+                    <table>
+                        <tr><th>Interruptor</th><th>Posiciones</th><th>Efecto</th></tr>
+                        <tr><td><b>PERMITE / PROHÍBE</b></td><td>Dos</td><td><b>PERMITE</b> desactiva toda la comprobación; <b>PROHÍBE</b> la activa.</td></tr>
+                        <tr><td><b>CAMPO</b> (3 interruptores)</td><td>Tres</td><td>Fijan el patrón ternario de 3 bits del campo destino.</td></tr>
+                        <tr><td><b>ZONA</b> (3 interruptores)</td><td>Tres</td><td>Fijan el patrón ternario de 3 bits de la zona del puente.</td></tr>
+                    </table>
+
+                    <h4>Posiciones de CAMPO y ZONA</h4>
+                    <table>
+                        <tr><th>Símbolo</th><th>Posición</th><th>Efecto en el emulador</th></tr>
+                        <tr><td><b>1</b></td><td>Arriba</td><td>Ese bit del campo o de la zona debe valer 1.</td></tr>
+                        <tr><td><b>~</b></td><td>Intermedia</td><td>Ese bit no importa.</td></tr>
+                        <tr><td><b>0</b></td><td>Abajo</td><td>Ese bit debe valer 0.</td></tr>
+                    </table>
+                    <p>El primer interruptor es el bit más significativo del patrón. Por ejemplo, <code>CAM: 1~0</code> acepta los campos 4 y 6; <code>CAM: 111</code> solo acepta el campo 7. No hay «un interruptor por módulo»: los ocho campos y las ocho zonas se seleccionan con el patrón completo.</p>
+                    <p>La zona son los 3 bits más significativos de la página del puente, es decir, grupos de cuatro páginas: zona 0 = páginas 0–3, zona 1 = 4–7, y así hasta la zona 7 = 28–31.</p>
+
+                    <h4>La barra de estado</h4>
+                    <p>El campo <b>PROT</b> de la barra inferior resume el estado. Por ejemplo:</p>
+                    <pre>PROT: PERM  CAM: 1~0  ZON: 111</pre>
+                    <ul>
+                        <li><b>PROT</b>: <b>PERM</b> con la protección desactivada y <b>PROH</b> con la activa.</li>
+                        <li><b>CAM</b>: los tres bits del patrón CAMPO, del más significativo al menos significativo.</li>
+                        <li><b>ZON</b>: los tres bits del patrón ZONA, en el mismo orden.</li>
+                    </ul>
+                    <p>El <b>mapa de memoria</b> escribe directamente en la ferrita y no aplica esta protección.</p>
+                </div>
+
+                <div class="help-content" id="help-panel-uab" role="tabpanel" aria-labelledby="help-tab-uab" data-help-panel="uab">
+                    <h3>Unidad Aritmética Binaria (UAB)</h3>
+                    <p class="help-note"><b>No implementada en esta versión.</b> Esta pestaña describe el hardware histórico documentado; el emulador todavía no ejecuta las instrucciones 65xx.</p>
+                    <p>La UAB era un periférico de alta velocidad conectado a través de la Unidad de Enlace, no formaba parte de la CPU. Tenía su propio acumulador («AC»): la CPU buscaba los operandos, disparaba la operación y leía el resultado. Sus instrucciones ocupan el rango octal <b>65xx</b>.</p>
+                    <p>La dirección del operando se coloca en la palabra <b>siguiente</b> a la instrucción y el <b>RCD</b> selecciona el módulo. Formatos: entero simple (12 bits), entero doble (24 bits) y flotante (36 bits: 28 de mantisa y 8 de exponente).</p>
+
+                    <h4>Registro de Estado (RE), 12 bits</h4>
+                    <table>
+                        <tr><th>Bits</th><th>Función</th></tr>
+                        <tr><td>0-3</td><td>Error matemático: overflow, división por cero, flotante no normalizado y underflow.</td></tr>
+                        <tr><td>4-5</td><td>Underflow (UAB a 0) y formato del dato: 0 entero, 1 flotante.</td></tr>
+                        <tr><td>6</td><td>Cambio de RCD: el operando multi-palabra empezó y terminó en módulos distintos.</td></tr>
+                        <tr><td>7-11</td><td>Trampa de instrucción: los 5 bits menos significativos de la operación que falló.</td></tr>
+                    </table>
+
+                    <h4>Repertorio 65xx</h4>
+                    <table>
+                        <tr><th>Código</th><th>Nemotécnico</th><th>Operación</th></tr>
+                        <tr><td><b>6540</b></td><td>ABSES</td><td>(«AC») + dato → «AC», simple precisión (1)</td></tr>
+                        <tr><td><b>6541</b></td><td>ABRES</td><td>(«AC») − dato → «AC», simple precisión (1)</td></tr>
+                        <tr><td><b>6542</b></td><td>ABMES</td><td>(«AC») × dato → «AC», simple precisión (1)</td></tr>
+                        <tr><td><b>6543</b></td><td>ABDES</td><td>(«AC») → M, 0 → («AC»), simple precisión (1)</td></tr>
+                        <tr><td><b>6544</b></td><td>ABSEN</td><td>(«AC») + dato → «AC», doble precisión (1)</td></tr>
+                        <tr><td><b>6545</b></td><td>ABREN</td><td>(«AC») − dato → «AC», doble precisión (1)</td></tr>
+                        <tr><td><b>6546</b></td><td>ABMEM</td><td>(«AC») × dato → «AC», doble precisión (1)</td></tr>
+                        <tr><td><b>6547</b></td><td>ABDEM</td><td>(«AC») → M, 0 → («AC»), doble precisión (1)</td></tr>
+                        <tr><td><b>6550</b></td><td>ABSFL</td><td>(«AC») + dato → «AC», triple precisión (1)</td></tr>
+                        <tr><td><b>6551</b></td><td>ABRFL</td><td>(«AC») − dato → «AC», triple precisión (1)</td></tr>
+                        <tr><td><b>6552</b></td><td>ABMFL</td><td>(«AC») × dato → «AC», triple precisión (1)</td></tr>
+                        <tr><td><b>6553</b></td><td>ABDFL</td><td>(«AC») → M, 0 → («AC»), triple precisión (1) (4)</td></tr>
+                        <tr><td><b>6554</b></td><td>ABDVF</td><td>(«AC») / dato → «AC», triple precisión; error si el divisor es 0 (1)</td></tr>
+                        <tr><td><b>6555</b></td><td>ABPEN</td><td>Parte entera: flotante triple → entero doble (3)</td></tr>
+                        <tr><td><b>6556</b></td><td>ABNOR</td><td>Normaliza: entero → flotante (3)</td></tr>
+                        <tr><td><b>6557</b></td><td>ABPPI</td><td>Parada de la próxima instrucción: VEA a sí misma (3)</td></tr>
+                        <tr><td><b>6560</b></td><td>ABLAC</td><td>Limpia el acumulador: 0 → «AC» (3)</td></tr>
+                        <tr><td><b>6561</b></td><td>ABSNE</td><td>Salta si no hay error: CP+1 si IE = 0 (3)</td></tr>
+                        <tr><td><b>6562</b></td><td>ABSSC</td><td>Salta si cero: CP+1 si («AC») = 0</td></tr>
+                        <tr><td><b>6563</b></td><td>ABSNC</td><td>Salta si no cero: CP+1 si («AC») ≠ 0 (3)</td></tr>
+                        <tr><td><b>6564</b></td><td>ABSSN</td><td>Salta si negativo: CP+1 si («AC») &lt; 0 (3)</td></tr>
+                        <tr><td><b>6565</b></td><td>ABSNN</td><td>Salta si no negativo: CP+1 si («AC») ≥ 0 (3)</td></tr>
+                        <tr><td><b>6566</b></td><td>ABSNP</td><td>Salta si no positivo: CP+1 si («AC») ≤ 0 (3)</td></tr>
+                        <tr><td><b>6567</b></td><td>ABSSP</td><td>Salta si positivo: CP+1 si («AC») &gt; 0 (3)</td></tr>
+                        <tr><td><b>6570</b></td><td>ABLGE</td><td>Limpieza general: «AC», RE, IE ← 0 (3)</td></tr>
+                        <tr><td><b>6571</b></td><td>ABIAO</td><td>Intercambio antes de operar (3)</td></tr>
+                        <tr><td><b>6572</b></td><td>ABTRE</td><td>Transfiere RE: (RE) OR («AC») → «AC» (3)</td></tr>
+                        <tr><td><b>6573</b></td><td>ABLRE</td><td>Limpia RE, excepto el bit de formato (3)</td></tr>
+                        <tr><td><b>6574</b></td><td>ABCIN</td><td>Activa la interrupción; si IE = 1 ejecuta INT</td></tr>
+                        <tr><td><b>6575</b></td><td>ABDIN</td><td>Desactiva la interrupción aunque IE = 1</td></tr>
+                        <tr><td><b>6576</b></td><td>ABNOP</td><td>No operar</td></tr>
+                        <tr><td><b>6577</b></td><td>ABMAD</td><td>Mantiene el depósito: se conserva «AC»</td></tr>
+                    </table>
+                    <p>(1) Requieren la dirección del operando en la palabra siguiente. (3) Trabajan solo sobre el «AC» y no llevan parámetro. (4) El listado histórico repite <code>ABSFL</code> en 6553; por el patrón <code>ABDES</code>/<code>ABDEM</code>, aquí se rotula <code>ABDFL</code> (depósito).</p>
+                </div>
+
+                <div class="help-content" id="help-panel-perifericos" role="tabpanel" aria-labelledby="help-tab-perifericos" data-help-panel="perifericos">
                     <h3>Los Periféricos Implementados</h3>
                     <p>Puedes abrirlos haciendo clic en sus iconos en la barra de estado inferior:</p>
 
@@ -2227,7 +2437,7 @@
                     <p>Máquina de escribir eléctrica. Tiene dos modos:</p>
                     <ul>
                         <li><b>LOCAL:</b> Escribe en el papel, pero no habla con la computadora.</li>
-                        <li><b>COMPUTER:</b> Todo lo que escribes se envía a la computadora. Si quieres ver la letra en el papel, la computadora debe devolvértela (prueba el programa Eco de la tecla C).</li>
+                        <li><b>COMPUTER:</b> Todo lo que escribes se envía a la computadora. Si quieres ver la letra en el papel, la computadora debe devolvértela (prueba el programa <i>Hola Mundo</i> de la tecla B, ENB).</li>
                         <li>Usa <b>ВР</b> o la tecla <b>Shift</b> para cambiar entre mayúsculas y minúsculas. La tecla <b>←</b> borra el último carácter.</li>
                     </ul>
 
@@ -2246,19 +2456,14 @@
                         <li>Las teclas <b>0-9</b> cargan el <b>Registro de Entrada (RE)</b> de 4 bits y activan el indicador <b>ID</b>. El programa lee el dígito con <b>TRA</b> y lo envía a la pantalla con <b>TAR</b>.</li>
                         <li><b>TAR</b> desplaza el <b>Registro de Pantalla (RDP)</b> una posición a la izquierda y deposita el dígito en la posición derecha. El <b>Registro de Fracción Decimal (RFD)</b> tiene 8 bits: cada bit en 1 muestra un punto a la derecha de la posición correspondiente. <b>POS</b> pone el signo a 0 (más) y <b>PUS</b> lo pone a 1 (menos).</li>
                         <li>Los botones <b>ALM</b> (Almacenar), <b>REC</b> (Recuperar) y <b>BOR</b> (Borrar) envían señales lógicas a la computadora. El monitor de demostración «Última Página» usa direcciones octales de 4 dígitos: en ese programa las teclas 8 y 9 se descartan, aunque el CODEC las registre en RE. El listado de la demo está en <b>EJEMPLOS/MONITOR_Ultima_Pagina_201B.len1</b>, con dirección, contenido y nemotécnico separados por tabuladores.</li>
-                        <li>Las teclas <b>ENA, ENB, ENC</b> arrancan programas (igual que las teclas A, B, C de la consola). El botón <b>ALT</b> detiene la máquina.</li>
+                        <li>Las teclas <b>ENA, ENB, ENC</b> arrancan programas (igual que las teclas A, B, C de la consola). El botón <b>ALT</b> produce un <b>Alto Dinámico (AD)</b>: detiene la máquina sin marcarla como alto de programa. El <b>Alto de Programa (AP)</b> solo lo genera la instrucción <b>ALT (7201)</b> ejecutada por un programa.</li>
                     </ul>
 
                     <h4>4. Otros Periféricos Históricos (No Simulados)</h4>
                     <p>La CID 201-B real también utilizaba equipos que aún no están implementados en esta versión: la impresora rápida <b>DZM-180</b>, el lector de tarjetas <b>ES-6001</b>, y las unidades de <b>cinta magnética</b> y <b>minidiscos</b>.</p>
+                </div>
 
-                    <h3>Mapa de Memoria</h3>
-                    <p>Haz clic en el icono del mapa (barra inferior) para ver la memoria de 32K (8 módulos de 4K).</p>
-                    <ul>
-                        <li>Puedes <b>editar</b> cualquier celda haciendo clic sobre su valor octal, escribiendo el nuevo valor y pulsando <b>Enter</b>.</li>
-                        <li>La opción <b>Seguimiento</b> hace que la vista se desplace automáticamente para mostrar la instrucción que se está ejecutando.</li>
-                    </ul>
-
+                <div class="help-content" id="help-panel-repertorio" role="tabpanel" aria-labelledby="help-tab-repertorio" data-help-panel="repertorio">
                     <h3>Repertorio Completo de Instrucciones</h3>
                     <p>La CID 201-B es una máquina de 12 bits con instrucciones de un solo operando. El código octal se descompone en bits para indicar la operación, el modo de direccionamiento y el operando.</p>
 
@@ -2270,12 +2475,12 @@
                         <tr><td><b>1xxx</b></td><td>SUM</td><td>Sumar. AC = AC + [Memoria]</td></tr>
                         <tr><td><b>2xxx</b></td><td>ISC</td><td>Incrementar y Saltar si Cero. [M] = [M] + 1; si [M] == 0, salta la siguiente instrucción.</td></tr>
                         <tr><td><b>3xxx</b></td><td>DEL</td><td>Depositar y Limpiar. [M] = AC; AC = 0.</td></tr>
-                        <tr><td><b>4xxx</b></td><td>VAS</td><td>Salto a Subrutina. Guarda CP en [M]; CP = M + 1.</td></tr>
-                        <tr><td><b>5xxx</b></td><td>VEA</td><td>Salto Directo. CP = [M].</td></tr>
+                        <tr><td><b>4xxx</b></td><td>VAS</td><td>Salto a Subrutina. Guarda CP en [M]; CP = M + 1. Con I = 1 usa el puente y cambia al campo de RNI.</td></tr>
+                        <tr><td><b>5xxx</b></td><td>VEA</td><td>Salto Directo. CP = M. Con I = 1 salta a la página y offset del puente, dentro del campo actual.</td></tr>
                     </table>
 
                     <h4>Microinstrucciones (MIO) - Código 7xxx</h4>
-                    <p>Son operaciones de un solo ciclo que no acceden a memoria (salvo para leer el operando en el caso de saltos). Se pueden combinar varias en una sola instrucción (haciendo un OR lógico).</p>
+                    <p>Son operaciones de un solo ciclo que no acceden a memoria (salvo para leer el operando en el caso de saltos). En el <b>grupo 0</b> (70xx) se combinan por <b>OR</b> de sus códigos. En el <b>grupo 1</b> (72xx y 73xx) los saltos usan otra regla: <b>SED</b>, <b>SAC</b> y <b>SAN</b> se combinan por <b>OR</b>; <b>SEC</b>, <b>SAD</b> y <b>SAP</b> se combinan por <b>AND</b>. El bit <b>0o002</b> selecciona el grupo AND y niega la condición. Los grupos OR y AND no se mezclan, porque ese bit es global.</p>
                     <table>
                         <tr><th>Código</th><th>Nemotécnico</th><th>Operación</th></tr>
                         <tr><td><b>7300</b></td><td>LAC</td><td>Limpia el Acumulador (AC = 0).</td></tr>
@@ -2285,20 +2490,29 @@
                         <tr><td><b>7420</b></td><td>CEN</td><td>Complementa el Registro de Enlace (EN = ~EN).</td></tr>
                         <tr><td><b>74xx</b></td><td>RDx</td><td>Rota el AC y el EN a la derecha (x = 1, 2, 4 u 8 bits).</td></tr>
                         <tr><td><b>75xx</b></td><td>RIx</td><td>Rota el AC y el EN a la izquierda (x = 1, 2, 4 u 8 bits).</td></tr>
-                        <tr><td><b>7201</b></td><td>ALT</td><td>Alto de Programa (detiene la máquina).</td></tr>
-                        <tr><td><b>7220</b></td><td>SAN</td><td>Salta si el AC es negativo (bit 11 = 1).</td></tr>
-                        <tr><td><b>7210</b></td><td>SAC</td><td>Salta si el AC es cero.</td></tr>
-                        <tr><td><b>7204</b></td><td>SED</td><td>Salta si el Registro de Enlace (EN) es 1.</td></tr>
+                        <tr><td><b>7201</b></td><td>ALT</td><td>Alto de Programa (AP): detiene la máquina. La tecla ALT del CODEC produce Alto Dinámico (AD).</td></tr>
+                        <tr><td><b>7220</b></td><td>SAN</td><td>Salta si el AC es negativo (bit 11 = 1). Se combina por OR.</td></tr>
+                        <tr><td><b>7210</b></td><td>SAC</td><td>Salta si el AC es cero. Se combina por OR.</td></tr>
+                        <tr><td><b>7204</b></td><td>SED</td><td>Salta si el Registro de Enlace (EN) es 1. Se combina por OR.</td></tr>
+                        <tr><td><b>7206</b></td><td>SEC</td><td>Salta si el Registro de Enlace (EN) es 0. Se combina por AND.</td></tr>
+                        <tr><td><b>7212</b></td><td>SAD</td><td>Salta si el AC no es cero. Se combina por AND.</td></tr>
+                        <tr><td><b>7222</b></td><td>SAP</td><td>Salta si el AC es positivo (bit 11 = 0 y AC distinto de 0). Se combina por AND.</td></tr>
                         <tr><td><b>7202</b></td><td>SLT</td><td>Salto incondicional (omite la siguiente instrucción).</td></tr>
-                        <tr><td><b>762N</b></td><td>CCIN</td><td>Carga el campo N (0-7) en el Registro Nuevo de Instrucción (RNI). Se aplica en la búsqueda siguiente.</td></tr>
+                        <tr><td><b>7240</b></td><td>LEN</td><td>Limpia el Registro de Enlace (EN = 0).</td></tr>
+                        <tr><td><b>7520</b></td><td>PUE</td><td>Pone el Registro de Enlace a 1 (EN = 1).</td></tr>
+                        <tr><td><b>7540</b></td><td>POE</td><td>Pone el Registro de Enlace a 0 (EN = 0).</td></tr>
+                        <tr><td><b>762N</b></td><td>CCIN</td><td>Carga el campo N (0-7) en el Registro Nuevo de Instrucción (RNI). Lo consume la próxima <b>VAS(I)</b>.</td></tr>
                         <tr><td><b>761N</b></td><td>CCDN</td><td>Carga el campo N (0-7) en el Registro de Campo de Dato (RCD).</td></tr>
                         <tr><td><b>7660</b></td><td>CIN</td><td>Activa las interrupciones.</td></tr>
                         <tr><td><b>7650</b></td><td>DIN</td><td>Desactiva las interrupciones.</td></tr>
-                        <tr><td><b>7700</b></td><td>VPP</td><td>Vuelve al Programa Principal (Salto indirecto a 0000).</td></tr>
+                        <tr><td><b>7700</b></td><td>VPP</td><td>Vuelve al Programa Principal: restaura RCI desde RVI y ejecuta <b>VEA(I) 0000</b>.</td></tr>
                     </table>
 
+                    <p><b>Saltos combinados:</b> <code>7230</code> (SAN + SAC) salta si AC ≤ 0; <code>7214</code> (SED + SAC) salta si EN ≠ 0 o AC = 0; <code>7216</code> (SEC + SAD) salta solo si EN = 0 y AC ≠ 0. Un mismo código puede combinar el salto con <b>LAC</b>, <b>LEN</b> o <b>ALT</b>: por ejemplo, <code>7330</code> limpia el AC y salta si AC ≤ 0.</p>
+
                     <h4>Direccionamiento indirecto (puente)</h4>
-                    <p>Una dirección de memoria se compone de <b>campo (3) + página (2) + offset (7)</b>: como 3+5+7 no cabe en una palabra de 12 bits, el puente alcanza las <b>4 primeras páginas</b> del módulo destino. El <b>campo del puente</b> es el que manda, y es lo que permite llamar a otro módulo y regresar. En <b>VAS(I)</b> y <b>VEA(I)</b> el campo de origen se guarda en <b>RVI</b>, y el del puente pasa a <b>RCI</b> y <b>RNI</b>. Los autoíndices 0010–0017 se incrementan <b>antes</b> de usarse como puente.</p>
+                    <p>Cuando el bit <b>I</b> vale 1, la palabra apuntada es un <b>puente</b> de 12 bits: <b>página (5 bits) + offset (7 bits)</b>. El campo (3 bits) no viaja dentro del puente; se toma de <b>RCD</b> para datos, de <b>RCI</b> para <b>VEA(I)</b> y de <b>RNI</b> para <b>VAS(I)</b>. La dirección absoluta de 15 bits se forma fuera del puente: <b>campo + página + offset</b>.</p>
+                    <p>Así el puente alcanza las <b>32 páginas</b> del campo, no solo las cuatro primeras. <b>VAS(I)</b> guarda el campo de origen en <b>RVI</b>, pasa <b>RNI</b> a <b>RCI</b> y salta al puente; <b>VEA(I)</b> salta dentro del campo actual sin cambiar RCI ni RVI; <b>VPP</b> restaura <b>RCI</b> desde <b>RVI</b> y vuelve por el puente de <b>0000</b>. Los autoíndices 0010–0017 se incrementan <b>antes</b> de usarse como puente.</p>
 
                     <h4>Instrucciones de Entrada/Salida (E/S) - Código 6xxx</h4>
                     <p>La computadora se comunica con los periféricos a través de la Unidad de Enlace. Las instrucciones de E/S se agrupan según el dispositivo.</p>
@@ -2380,6 +2594,7 @@
                         <button class="mm-nav-btn checked" id="mm-follow-btn" title="Desplazamiento automático a la dirección en ejecución">Seguimiento</button>
                     </div>
                     <div class="mm-ctrl-row">
+                        <span class="mm-hint" id="mm-hint">Clic en una celda para editar · Enter guarda y avanza · Esc cancela</span>
                     </div>
                 </div>
                 <div class="mm-body" id="mm-body"></div>
@@ -2388,6 +2603,11 @@
 
     </div>
   <div class="main-row" id="main-row-2"></div>
+
+  <div id="visit-counter-container">
+    Visitas: <span id="vercount_value_site_pv">Loading</span> ·
+    Visitantes: <span id="vercount_value_site_uv">Loading</span>
+  </div>
 </div>
 
 <div class="load-toast" id="load-toast" role="status" aria-live="polite"></div>
@@ -2521,6 +2741,11 @@
         for (let i = 0; i < 12; i++) v = (v << 1) | (S.switches[i] ? 1 : 0);
         return v & 0xFFF;
     }
+    function getSwitchValue3(switches) {
+        let v = 0;
+        for (let i = 0; i < 3; i++) v = (v << 1) | (switches[i] ? 1 : 0);
+        return v & 0x7;
+    }
     function effectiveInstrAddr() { return ((S.RCI & 0x7) << 12) | (S.CP & 0xFFF); }
 
     function baseAddr(instr, isDataOp) {
@@ -2530,13 +2755,12 @@
         return ((f & 0x7) << 12) | (pg << 7) | off;
     }
 
-    /* Puente indirecto (doc 201-B, "Direccionamiento de memoria"):
-       campo(3) + página(5) + offset(7) = 15 bits no caben en una palabra de 12,
-       de modo que la partición real es  campo(3) + página(2) + offset(7).
-       El campo del puente es el que manda: es lo que permite llamar a otro
-       módulo y volver con RVI. */
+    /* Puente indirecto (manual de 1978, p. 11: «Puente RP + RI2»).
+       El puente es una palabra de 12 bits: página (5) + offset (7). El campo
+       (3 bits) no cabe y se toma de RCD/RCI; en VAS(I) lo aporta RNI. Así el
+       puente cubre las 32 páginas del campo, igual que la PDP-8/I. */
     function decodeBridge(b) {
-        return { campo: (b >> 9) & 0x7, pagina: (b >> 7) & 0x3, offset: b & 0x7F };
+        return { pagina: (b >> 7) & 0x1F, offset: b & 0x7F };
     }
 
     /* Zona de memoria de una dirección absoluta: los 3 bits altos de su página
@@ -2555,38 +2779,54 @@
         if (lo >= 0o10 && lo <= 0o17) S.memory[pa] = mask12(S.memory[pa] + 1);
 
         const b = S.memory[pa] & 0xFFF;
-        const { campo: nf, pagina: np, offset: no } = decodeBridge(b);
+        const { pagina: np, offset: no } = decodeBridge(b);
         const op = (instr >> 9) & 0x7;
-        const addr = (nf << 12) | (np << 7) | no;
 
-        // Protección (doc 331-332): ISC/DEL se comprueban contra RCD y VAS
-        // indirecto contra RCI; la zona son los 3 bits altos del puente.
+        // Campo destino: RCD para datos, RCI para VEA(I), RNI para VAS(I).
+        // El campo no viaja dentro del puente.
+        let campo;
+        if (isDataOp) campo = S.RCD;
+        else if (op === 4) campo = S.RNI & 0x7;   // VAS(I)
+        else campo = S.RCI;                        // VEA(I)
+        const addr = ((campo & 0x7) << 12) | (np << 7) | no;
+
+        // Protección (manual p. 14): solo ISC, DEL y VAS indirectos. El campo
+        // es RCD en ISC/DEL y RNI (el nuevo RCI) en VAS(I); la zona son los
+        // 3 bits más significativos del puente.
         if (S.protMode && (op === 2 || op === 3 || op === 4)) {
-            const campo = (op === 4) ? S.RCI : S.RCD;
-            if (!checkProtection(campo, nf)) {
+            if (!checkProtection(campo, (b >> 9) & 0x7)) {
                 triggerViolation();
                 return { addr: init, indirect: true, violation: true };
             }
         }
 
-        // VAS(I)/VEA(I): RVI guarda el campo de origen y RCI/RNI pasan al
-        // campo del puente, con lo que la ejecución continúa allí.
-        if (!isDataOp && (op === 4 || op === 5)) {
+        // VAS(I) es la única instrucción que consume RNI: guarda el campo de
+        // origen en RVI y pasa a RCI el campo nuevo que preparó CCIN.
+        if (!isDataOp && op === 4) {
             S.RVI = S.RCI;
-            S.RCI = nf;
-            S.RNI = nf;
+            S.RCI = S.RNI & 0x7;
         }
 
-        return { addr, indirect: true, bridge: { campo: nf, pagina: np, offset: no } };
+        return { addr, indirect: true, bridge: { pagina: np, offset: no, campo } };
     }
 
     function checkProtection(destField, destZona) {
         if (!S.protMode) return true;
-        // Interruptor de 3 posiciones: 0 = '1' permite, 1 = '~' indiferente,
-        // 2 = '0' prohíbe (ver protPosChar).
-        const f = destField & 0x7, z = destZona & 0x7;
-        if (f < S.protCampo.length && S.protCampo[f] === 2) return false;
-        if (z < S.protZona.length && S.protZona[z] === 2) return false;
+        // CAMPO y ZONA son patrones ternarios de 3 bits. Cada interruptor fija
+        // un bit: posición 0 = exige 1, 1 = no importa (~), 2 = exige 0.
+        // El primer interruptor es el bit más significativo.
+        for (let i = 0; i < 3; i++) {
+            const bit = (destField >> (2 - i)) & 1;
+            const pos = S.protCampo[i];
+            if (pos === 0 && bit !== 1) return false;
+            if (pos === 2 && bit !== 0) return false;
+        }
+        for (let i = 0; i < 3; i++) {
+            const bit = (destZona >> (2 - i)) & 1;
+            const pos = S.protZona[i];
+            if (pos === 0 && bit !== 1) return false;
+            if (pos === 2 && bit !== 0) return false;
+        }
         return true;
     }
 
@@ -2622,10 +2862,8 @@
 
     function doCI() {
         S.vpp = false; S.icp = S.CP;
-        S.RCI = S.RNI & 0x7;                 // campo elegido (CCIN o el anterior)
         const fa = effectiveInstrAddr(); S.lastInstrAbs = fa;
         S.ir = S.memory[fa] & 0xFFF; S.RM = S.ir;
-        S.RNI = S.RCI;                       // por defecto, la siguiente sigue aquí
         S.CP = mask12(S.CP + 1);
         const op = (S.ir >> 9) & 0x7, ind = (S.ir >> 8) & 1;
         // Las microinstrucciones y la E/S (op >= 6) se ejecutan en CM.
@@ -2638,10 +2876,8 @@
 
     function doCM() {
         S.vpp = false; S.icp = S.CP;
-        S.RCI = S.RNI & 0x7;                 // campo elegido (CCIN o el anterior)
         const fa = effectiveInstrAddr(); S.lastInstrAbs = fa;
         S.ir = S.memory[fa] & 0xFFF; S.RM = S.ir;
-        S.RNI = S.RCI;                       // por defecto, la siguiente sigue aquí
         S.CP = mask12(S.CP + 1);
         const op = (S.ir >> 9) & 0x7;
         if (op === 7 && (S.ir & 0xFFF) === 0o7700) { S.vpp = true; S.cycle = 'CD'; return; }
@@ -2650,7 +2886,10 @@
     }
 
     function doCD() {
-        const irEff = S.vpp ? 0o5400 : S.ir;   // VPP = VEA(I) 0000
+        // VPP (7700) restaura el campo anterior desde RVI y vuelve por el
+        // puente de 0000 del campo recuperado: es VEA(I) 0000.
+        if (S.vpp) S.RCI = S.RVI & 0x7;
+        const irEff = S.vpp ? 0o5400 : S.ir;
         const op = (irEff >> 9) & 0x7;
         S.eff = resolveAddress(irEff, op < 4);
         if (S.eff.violation) return;
@@ -2659,11 +2898,6 @@
 
     function doCO() {
         const op = (S.ir >> 9) & 0x7, a = S.eff.addr;
-        // Protección de escritura/lectura directa: campo RCD y zona según la
-        // página destino. En indirecto ya se comprobó en resolveAddress().
-        if (S.protMode && (op === 2 || op === 3) && !S.eff.indirect) {
-            if (!checkProtection(S.RCD, zoneOf(a))) { triggerViolation(); return; }
-        }
         switch (op) {
             case 0: S.RM = S.memory[a] & 0xFFF; S.AC = mask12(S.AC & S.RM); break;
             case 1: { S.RM = S.memory[a] & 0xFFF; const s = S.AC + S.RM; S.AC = s & 0xFFF; S.EN = (s >> 12) & 1; } break;
@@ -2700,26 +2934,39 @@
         do { stepCycle(); } while (!isBoundary() && S.armed && S.power && guard++ < 8);
     }
 
+    function evalGroup1Skip(op) {
+        const andMode = (op & 0o002) !== 0;
+        const selSan = (op & 0o020) !== 0;   // SAN en OR, SAP en AND
+        const selSac = (op & 0o010) !== 0;   // SAC en OR, SAD en AND
+        const selSed = (op & 0o004) !== 0;   // SED en OR, SEC en AND
+        if (!selSan && !selSac && !selSed) return andMode; // SLT: AND vacío
+        if (andMode) {
+            let r = true;
+            if (selSan) r = r && (S.AC !== 0 && (S.AC & 0o4000) === 0); // AC > 0
+            if (selSac) r = r && (S.AC !== 0);                          // AC != 0
+            if (selSed) r = r && (S.EN === 0);                          // EN = 0
+            return r;
+        }
+        if (selSan && (S.AC & 0o4000) !== 0) return true;  // AC < 0
+        if (selSac && S.AC === 0) return true;             // AC = 0
+        if (selSed && S.EN !== 0) return true;             // EN != 0
+        return false;
+    }
+
     function handleMicro(op) {
-        if ((op & 0o600) === 0o200) {
-            switch (op) {
-                case 0o7200: break; case 0o7201: halt('AP'); break;
-                case 0o7202: S.CP = mask12(S.CP + 1); break;
-                case 0o7204: if (S.EN !== 0) S.CP = mask12(S.CP + 1); break;
-                case 0o7206: if (S.EN !== 0) S.CP = mask12(S.CP + 1); break;
-                case 0o7210: if (S.AC === 0) S.CP = mask12(S.CP + 1); break;
-                case 0o7212: if (S.AC !== 0) S.CP = mask12(S.CP + 1); break;
-                case 0o7220: if (S.AC & 0o4000) S.CP = mask12(S.CP + 1); break;
-                case 0o7222: if (!(S.AC & 0o4000) && S.AC !== 0) S.CP = mask12(S.CP + 1); break;
-                case 0o7240: S.EN = 0; break; case 0o7300: S.AC = 0; break;
-            }
+        // Grupo 1: 72xx y 73xx (segundo dígito octal 2 o 3)
+        if ((op & 0o200) !== 0 && (op & 0o400) === 0) {
+            if (evalGroup1Skip(op)) S.CP = mask12(S.CP + 1);
+            if ((op & 0o100) !== 0) S.AC = 0;    // LAC (7300)
+            if ((op & 0o040) !== 0) S.EN = 0;    // LEN (7240)
+            if ((op & 0o001) !== 0) halt('AP');  // ALT (7201)
             return;
         }
         if ((op & 0o400) && ((op & 0o200) === 0)) {
             // 1. Control del Registro de Enlace (EN); prioridad sobre las rotaciones
             if (op & 0o040) { S.EN = 0; return; } // LEN (Limpia el Registro de Enlace)
-            if (op & 0o020) { S.EN = S.EN ? 0 : 1; return; } // CEN (Complementa el Registro de Enlace)
             if (op === 0o7520) { S.EN = 1; return; } // PUE (Pone el Registro de Enlace a 1)
+            if (op & 0o020) { S.EN = S.EN ? 0 : 1; return; } // CEN (Complementa el Registro de Enlace)
             if (op === 0o7540) { S.EN = 0; return; } // POE (Pone el Registro de Enlace a 0)
 
             // 2. Rotaciones (RDx y RIx)
@@ -2932,9 +3179,13 @@
         setText('st-prot-mode', S.protMode ? 'PROH' : 'PERM');
         setText('st-prot-campo', S.protCampo.map(protPosChar).join(''));
         setText('st-prot-zona', S.protZona.map(protPosChar).join(''));
+        setText('st-sw-dato', String(getSwitchValue3(S.switchesDato)));
+        setText('st-sw-instr', String(getSwitchValue3(S.switchesInstr)));
         setText('st-sw', toOctal(getSwitchValue()));
         setText('st-mode', ['CONTINUO', 'CICLO', 'PASO'][S.mode]);
         setText('st-state', (S.state === 'ALTO' && S.altoType) ? `ALTO (${S.altoType})` : S.state);
+        const btnReset = document.getElementById('btn-soft-reset');
+        if (btnReset) btnReset.disabled = !S.power;
     }
 
     function renderTeleIndicators() {
@@ -3793,6 +4044,7 @@
         const rows = body.querySelectorAll('.mm-row');
         for (let i = 0; i < rows.length; i++) {
             const row = rows[i]; const abs = +row.dataset.abs; const vEl = row.children[2];
+            if (vEl && vEl.querySelector('input')) continue; // no tocar la celda en edición
             const v = (S.memory[abs] & 0xFFF).toString(8).padStart(4, '0');
             if (vEl && vEl.textContent !== v) vEl.textContent = v;
         }
@@ -3888,31 +4140,84 @@
         setTimeout(() => { if (!MM.isOpen) { p.classList.add('is-hidden'); updateMainLayout(); } }, 450);
     }
 
+    // Valor octal de una celda del mapa: de 1 a 4 dígitos del 0 al 7.
+    // Devuelve null si el texto no es un octal válido de 12 bits.
+    function parseMMValue(texto) {
+        const limpio = String(texto == null ? '' : texto).trim();
+        if (!/^[0-7]{1,4}$/.test(limpio)) return null;
+        return parseInt(limpio, 8);
+    }
+
+    // Escribe una celda desde el mapa de memoria. Devuelve true si escribió.
+    // La ferrita se escribe con la máquina encendida; si está ejecutando,
+    // la edición la detiene en ALTO DINÁMICO (AD).
+    function mmCommitCell(abs, texto) {
+        if (!S.power) return false;
+        if (!Number.isInteger(abs) || abs < 0 || abs > 0x7FFF) return false;
+        const valor = parseMMValue(texto);
+        if (valor === null) return false;
+        if (S.running) halt('AD');
+        S.memory[abs] = mask12(valor);
+        return true;
+    }
+
     function startCellEdit(row) {
         if (!row) return;
+        if (!S.power) { mostrarAvisoCarga('Encienda la CENTRAL para editar la memoria.', true); return; }
         const valSpan = row.querySelector('.mm-col-val');
         if (!valSpan || valSpan.querySelector('input')) return;
-        const abs = parseInt(row.dataset.abs, 10); const currentVal = valSpan.textContent.trim();
+        const abs = parseInt(row.dataset.abs, 10);
         const input = document.createElement('input');
-        input.type = 'text'; input.value = currentVal; input.className = 'mm-edit-input'; input.maxLength = 4;
-        valSpan.innerHTML = ''; valSpan.appendChild(input); input.focus(); input.select();
-        let isDone = false;
-        const finishEdit = (save) => {
-            if (isDone) return; isDone = true;
-            if (save) {
-                let newVal = parseInt(input.value, 8); if (isNaN(newVal)) newVal = 0;
-                S.memory[abs] = mask12(newVal);
-            }
+        input.type = 'text'; input.value = (S.memory[abs] & 0xFFF).toString(8).padStart(4, '0');
+        input.className = 'mm-edit-input'; input.maxLength = 4; input.inputMode = 'numeric';
+        input.setAttribute('aria-label', 'Valor octal de la dirección ' + abs.toString(8).padStart(5, '0'));
+        valSpan.innerHTML = ''; valSpan.appendChild(input);
+        row.classList.add('editing');
+        input.focus(); input.select();
+
+        let cerrado = false;
+        const restaurar = () => {
+            row.classList.remove('editing');
             valSpan.textContent = (S.memory[abs] & 0xFFF).toString(8).padStart(4, '0');
         };
+        const avanzarCelda = () => {
+            const nextAbs = abs + 1;
+            if (nextAbs > 0x7FFF) return;
+            if ((nextAbs >> 12) !== MM.module) buildMMGrid(nextAbs >> 12);
+            const nextRow = document.querySelector(`.mm-row[data-abs="${nextAbs}"]`);
+            if (nextRow) { nextRow.scrollIntoView({ block: 'nearest' }); startCellEdit(nextRow); }
+        };
+        const guardar = (avanzar) => {
+            if (cerrado) return;
+            const texto = input.value.trim();
+            if (texto === '') { cerrado = true; restaurar(); return; }   // vacío = cancelar
+            if (!mmCommitCell(abs, texto)) {
+                input.classList.add('invalid');
+                input.focus(); input.select();
+                mostrarAvisoCarga('Valor octal no válido: use solo dígitos 0-7 (máximo 4).', true);
+                return;
+            }
+            cerrado = true;
+            restaurar();
+            mmAfterStep();
+            renderAll();
+            if (avanzar) avanzarCelda();
+        };
+        const cancelar = () => {
+            if (cerrado) return; cerrado = true;
+            restaurar();
+        };
+
+        input.addEventListener('input', () => input.classList.remove('invalid'));
         input.addEventListener('keydown', (ev) => {
-            if (ev.key === 'Enter') {
-                ev.preventDefault(); finishEdit(true);
-                const nextAbs = abs + 1; const nextRow = document.querySelector(`.mm-row[data-abs="${nextAbs}"]`);
-                if (nextRow) { nextRow.scrollIntoView({ block: 'nearest' }); startCellEdit(nextRow); }
-            } else if (ev.key === 'Escape') { ev.preventDefault(); finishEdit(false); }
+            if (ev.key === 'Enter' || ev.key === 'Tab') { ev.preventDefault(); guardar(true); }
+            else if (ev.key === 'Escape') { ev.preventDefault(); cancelar(); }
         });
-        input.addEventListener('blur', () => finishEdit(true));
+        input.addEventListener('blur', () => {
+            if (cerrado) return;
+            if (parseMMValue(input.value) === null) { cancelar(); return; }
+            guardar(false);
+        });
     }
 
     /* =========================================================================
@@ -4032,7 +4337,8 @@
             S.cycle = 'CI'; S.armed = false; S.vpp = false;
             S.ir = 0; S.icp = 0; S.eff = null; S.lastInstrAbs = 0;
             S.state = 'ALTO'; S.altoType = null; S.violMem = false;
-            loadPrograms(); UNIDAD.IP = true; CONSUL.isPrinting = false;
+            // La memoria es de ferrita: el encendido no la borra ni recarga las demos.
+            UNIDAD.IP = true; CONSUL.isPrinting = false;
         } else {
             S.state = 'APAGADO'; S.altoType = null; S.violMem = false;
             S.EN = S.AC = S.RM = S.CP = S.RCD = S.RCI = S.RNI = S.RVI = 0;
@@ -4046,6 +4352,36 @@
         renderAll();
         renderCodec();
         if (MM.isOpen) { updateMMValues(); updateMMHighlight(); }
+    }
+
+    // Reset de la máquina encendida: inicializa la memoria (demos de fábrica),
+    // limpia todos los registros y queda en ALTO DINÁMICO. Los interruptores
+    // —incluidos SW, DATO e INSTRUCCIÓN— conservan su posición y estado.
+    function softReset() {
+        if (!S.power) return false;
+        if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+        S.running = false;
+        S.armed = false;
+        S.vpp = false;
+        S.EN = 0; S.AC = 0; S.RM = 0; S.CP = 0;
+        S.RCD = 0; S.RCI = 0; S.RNI = 0; S.RVI = 0;
+        S.RI = 0; S.RD = 0; S.RP = 0; S.RI1 = 0;
+        S.ptX = 0; S.ptY = 0; S.ptZ = 0;
+        S.indX = 0; S.indY = 0; S.indZ = 0;
+        S.extX = 0; S.extY = 0; S.extZ = 0;
+        S.cycle = 'CI';
+        S.ir = 0; S.icp = 0; S.eff = null; S.lastInstrAbs = 0;
+        S.state = 'ALTO'; S.altoType = 'AD'; S.violMem = false;
+        S.interruptPending = false; S.interruptEnable = false;
+        UNIDAD.IL = false; UNIDAD.IP = true; UNIDAD.IF = false; UNIDAD.IE = false; UNIDAD.IT = false;
+        UNIDAD.inBuf = [];
+        // El reset es de la computadora: no altera el CODEC, el Ricoh ni el
+        // estado del Consul (un periférico externo puede seguir imprimiendo).
+        loadPrograms();
+        renderAll();
+        renderCodec();
+        if (MM.isOpen) { updateMMValues(); updateMMHighlight(); }
+        return true;
     }
 
     function halt(type) {
@@ -4365,6 +4701,25 @@
         btn.blur();
     });
 
+    // Pestañas de la ayuda: una sección visible a la vez.
+    const helpPanelEl = document.getElementById('help-panel');
+    if (helpPanelEl) {
+        const helpTabs = Array.from(helpPanelEl.querySelectorAll('.help-tab'));
+        const helpPanels = Array.from(helpPanelEl.querySelectorAll('.help-content[data-help-panel]'));
+        helpTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const destino = tab.dataset.helpTab;
+                helpTabs.forEach(t => {
+                    const activo = (t === tab);
+                    t.classList.toggle('active', activo);
+                    t.setAttribute('aria-selected', activo ? 'true' : 'false');
+                });
+                helpPanels.forEach(p => p.classList.toggle('active', p.dataset.helpPanel === destino));
+                tab.blur();
+            });
+        });
+    }
+
     const btnCodec = document.getElementById('btn-codec');
     if (btnCodec) btnCodec.addEventListener('click', (e) => {
         CODEC.isOpen = !CODEC.isOpen;
@@ -4385,6 +4740,8 @@
     const mmGotoCp = document.getElementById('mm-goto-cp'); if (mmGotoCp) mmGotoCp.addEventListener('click', () => { MM.cpFocus = true; mmFollowNow(); });
     const mmGotoInstr = document.getElementById('mm-goto-instr'); if (mmGotoInstr) mmGotoInstr.addEventListener('click', () => { MM.cpFocus = false; mmFollowNow(); });
     const mmFollowBtn = document.getElementById('mm-follow-btn'); if (mmFollowBtn) mmFollowBtn.addEventListener('click', e => { MM.seguimiento = !MM.seguimiento; e.currentTarget.classList.toggle('checked', MM.seguimiento); if (MM.seguimiento) mmFollowNow(); e.currentTarget.blur(); });
+    const btnSoftReset = document.getElementById('btn-soft-reset');
+    if (btnSoftReset) btnSoftReset.addEventListener('click', () => { if (softReset()) btnSoftReset.blur(); });
     const mmBody = document.getElementById('mm-body'); if (mmBody) mmBody.addEventListener('click', (e) => {
         if (e.target.closest('.mm-edit-input')) return;
         const row = e.target.closest('.mm-row'); if (row) startCellEdit(row);
@@ -4692,7 +5049,7 @@
 
     function cargarLstbEnMemoria(texto) {
         if (!S.memory) throw errorCarga('La memoria del emulador no está disponible.', 'MEMORIA');
-        if (!S.power) throw errorCarga('Encienda la CID 201-B (CENTRAL) antes de cargar: el encendido restablece la memoria.', 'APAGADA');
+        if (!S.power) throw errorCarga('Encienda la CID 201-B (CENTRAL) antes de cargar.', 'APAGADA');
 
         // Si la máquina está ejecutando, primero se detiene en ALTO. La carga
         // nunca debe interrumpir una instrucción a medias ni arrancar sola.
@@ -4777,7 +5134,7 @@
 
         btn.addEventListener('click', () => {
             if (!S.power) {
-                mostrarAvisoCarga('Encienda la CID 201-B (CENTRAL) antes de cargar: el encendido restablece la memoria y las demos.', true);
+                mostrarAvisoCarga('Encienda la CID 201-B (CENTRAL) antes de cargar.', true);
                 return;
             }
             inp.click();
@@ -4917,7 +5274,7 @@
         S.memory[0o7631] = 0o1205; // SUM 7605 (RegNum)
         S.memory[0o7632] = 0o0207; // YLO 7607 (maskL)
         S.memory[0o7633] = 0o7403; // RD3 (desplaza a la der)
-        S.memory[0o7634] = 0o4312; // VAS 7712 (display; vuelve a 7602)
+        S.memory[0o7634] = 0o4312; // VAS 7712 (display; retorno por el puente)
         S.memory[0o7635] = 0o5202; // VEA 7602 (end)
         S.memory[0o7636] = 0o0000; // RECdir
         S.memory[0o7637] = 0o0000; // RECstate
@@ -4937,42 +5294,44 @@
         S.memory[0o7653] = 0o7300; // LAC
         S.memory[0o7654] = 0o1636; // SUM I 7636 (RECdir): AC = [RECdir]
         S.memory[0o7655] = 0o3205; // DEL 7605 (RegNum = valor leído)
-        S.memory[0o7656] = 0o3264; // DEL 7664 (ALMstate = 0; AC ya es 0)
+        S.memory[0o7656] = 0o3373; // DEL 7773 (ALMstate = 0; AC ya es 0)
         S.memory[0o7657] = 0o2236; // ISC 7636 (RECdir++; si envuelve, salta el NOP)
         S.memory[0o7660] = 0o7200; // NOP (destino del salto de ISC)
-        S.memory[0o7661] = 0o5314; // VEA 7714 (display desde RegNum)
-        S.memory[0o7662] = 0o7200; // no se usa: el display vuelve a 7602
-        S.memory[0o7663] = 0o0000; // ALMdir
-        S.memory[0o7664] = 0o0000; // ALMstate
+        // REC llama al display con VAS y vuelve a init: así RECstate
+        // sobrevive y la próxima pulsación lee la dirección siguiente.
+        S.memory[0o7661] = 0o7300; // LAC
+        S.memory[0o7662] = 0o1205; // SUM 7605 (AC = RegNum leído)
+        S.memory[0o7663] = 0o4312; // VAS 7712 (display; retorno en 7664)
+        S.memory[0o7664] = 0o5200; // VEA 7600 (init; conserva RECstate)
 
         // 7665 ALMacena
         S.memory[0o7665] = 0o6311; // SIA
         S.memory[0o7666] = 0o5200; // VEA 7600 (init)
         S.memory[0o7667] = 0o6312; // LIA
-        S.memory[0o7670] = 0o1264; // SUM 7664 (ALMstate)
+        S.memory[0o7670] = 0o1373; // SUM 7773 (ALMstate)
         S.memory[0o7671] = 0o7210; // SAC
         S.memory[0o7672] = 0o5301; // VEA 7701 (write)
         S.memory[0o7673] = 0o7300; // LAC
         S.memory[0o7674] = 0o1205; // SUM 7605 (RegNum)
-        S.memory[0o7675] = 0o3263; // DEL 7663 (ALMdir)
+        S.memory[0o7675] = 0o3372; // DEL 7772 (ALMdir)
         S.memory[0o7676] = 0o7010; // CAC
-        S.memory[0o7677] = 0o3264; // DEL 7664 (ALMstate)
+        S.memory[0o7677] = 0o3373; // DEL 7773 (ALMstate)
         S.memory[0o7700] = 0o5307; // VEA 7707 (endALM)
         S.memory[0o7701] = 0o7300; // LAC
         S.memory[0o7702] = 0o1205; // SUM 7605 (RegNum)
-        S.memory[0o7703] = 0o3663; // DEL I 7663 (ALMdir)
-        S.memory[0o7704] = 0o1263; // SUM 7663 (ALMdir)
+        S.memory[0o7703] = 0o3772; // DEL I 7772 (ALMdir)
+        S.memory[0o7704] = 0o1372; // SUM 7772 (ALMdir)
         S.memory[0o7705] = 0o7004; // IAC
-        S.memory[0o7706] = 0o3263; // DEL 7663 (ALMdir)
+        S.memory[0o7706] = 0o3372; // DEL 7772 (ALMdir)
         S.memory[0o7707] = 0o3237; // DEL 7637 (RECstate)
-        S.memory[0o7710] = 0o4312; // VAS 7712 (display; vuelve a 7602)
+        S.memory[0o7710] = 0o4312; // VAS 7712 (display; retorno por el puente)
         S.memory[0o7711] = 0o5200; // VEA 7600 (init)
 
         // 7712 display (subrutina)
         // Recibe el valor en AC, lo guarda en RegNum y envía 8 dígitos
         // octales al RDP: cuatro ceros a la izquierda y los cuatro dígitos
         // de RegNum. Cada TAR desplaza el RDP una posición.
-        S.memory[0o7712] = 0o0000; // slot de VAS (el retorno del display es fijo)
+        S.memory[0o7712] = 0o0000; // slot de VAS: guarda el puente de retorno
         S.memory[0o7713] = 0o3205; // DEL 7605 (RegNum = AC)
         S.memory[0o7714] = 0o1205; // SUM 7605 (AC = RegNum)
         S.memory[0o7715] = 0o3353; // DEL 7753 (temp = AC)
@@ -5003,7 +5362,7 @@
         S.memory[0o7746] = 0o1353; // SUM 7753 (temp)
         S.memory[0o7747] = 0o0352; // YLO 7752 (0007: grupo de bits 0-2)
         S.memory[0o7750] = 0o6434; // TAR (dígito 4)
-        S.memory[0o7751] = 0o5202; // VEA 7602 (fin: el display vuelve al bucle)
+        S.memory[0o7751] = 0o5712; // VEA I 7712 (retorno por el puente)
 
         // Máscaras de los grupos de 3 bits que no están en el bloque principal.
         // 7770 y 7771 son octales válidos; 7768/7769 no existen en octal.
@@ -5023,10 +5382,15 @@
         S.memory[0o7761] = 0o5366; // VEA 7766 (inválido)
         S.memory[0o7762] = 0o7300; // LAC
         S.memory[0o7763] = 0o1353; // SUM 7753
-        S.memory[0o7764] = 0o4312; // VAS 7712 (display; vuelve a 7602)
+        S.memory[0o7764] = 0o4312; // VAS 7712 (display; retorno por el puente)
         S.memory[0o7765] = 0o5202; // VEA 7602 (end)
         S.memory[0o7766] = 0o5202; // VEA 7602 (inválido: descarta)
         S.memory[0o7767] = 0o0010; // máscara del bit 3
+
+        // Variables de ALM, fuera del bloque 7661-7664 que usa REC.
+        S.memory[0o7772] = 0o0000; // ALMdir
+        S.memory[0o7773] = 0o0000; // ALMstate
+        S.memory[0o7774] = 0o7500; // relleno NOP
 
         // --- VECTORES DE ARRANQUE ---
         S.memory[0o7775] = 0o0200; // A -> Shift
@@ -5070,6 +5434,9 @@
     renderCodec();
 
 </script>
+
+<!-- Vercount: contador de visitas y visitantes -->
+<script defer src="https://events.vercount.one/js"></script>
 
 </body>
 </html>
