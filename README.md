@@ -130,12 +130,16 @@ La configuración **BMX** de 1975 y la UAB ampliaron todavía más el alcance de
 La CID 201-B se utilizó en la industria azucarera, en la salud, en la educación y en la administración. El software incluía ensambladores, compiladores y lenguajes de alto nivel. Los sistemas operativos permitían procesar trabajos de forma individual o por lotes, con gestión de archivos, bibliotecas y programas de servicio.
 
 <p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_0prototipo.jpg" /></p>
+CID 201-B prototipo
 
 <p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_1serie1.jpg" /></p>
+CID 201-B de primera serie
 
 <p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_manufactura1.jpg" alt="Manufactura de la CID 201-B" /></p>
+Ensamblado de la CID 201-B por estudiantes de la Escuela Vocacional "Vladimir Ilich Lenin"
 
 <p align="center"><img width="720" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_ricoh3000.jpg" /></p>
+Consola "Ricoh-3000". Una teleimpresora y terminal de datos hecha en Japón, basada en al IBM 2741, a la que se añadió un perforador y un lector de cinta de papel.
 
 ### Qué modela este emulador
 
