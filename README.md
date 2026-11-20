@@ -15,11 +15,12 @@ Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cub
 
 > Un homenaje ejecutable a una de las primeras computadoras diseñadas y fabricadas en América Latina, y a las personas que la concibieron, construyeron y programaron.
 
+**Atención: este es un trabajo en progreso.** El emulador no pretende reproducir todavía la totalidad de la configuración de la máquina real. Las secciones de [Periféricos](#periféricos) y [Notas técnicas](#notas-técnicas) detallan qué está implementado y qué queda pendiente.
+
 # CID 201-B
 
 <p align="center"><img width="1280" src="https://github.com/maikelsz/CIDmulatorCID201B/blob/main/pictures/CID_201-B_2.jpg" /></p>
 
-**Atención: este es un trabajo en progreso.** El emulador no pretende reproducir todavía la totalidad de la configuración de la máquina real. Las secciones de [Periféricos](#periféricos) y [Notas técnicas](#notas-técnicas) detallan qué está implementado y qué queda pendiente.
 
 ---
 
