@@ -5,13 +5,11 @@
 
 Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cubana **CID 201-B** (Centro de Investigación Digital, ICID, Cuba, 1973). Reproduce su palabra de 12 bits, la memoria de ferrita modular de hasta 32 Kpalabras, el direccionamiento por campo y página, la consola física, la Unidad de Enlace y los periféricos que el emulador implementa: las teleimpresoras **Consul 260** y **Ricoh 3000**, la consola decimal **CODEC** y los puntos de entrada/salida **X, Y y Z**. Inicia con varios programas de ejemplo precargados.
 
-
 [![Single File](https://img.shields.io/badge/single--file-HTML%2FCSS%2FJS-brightgreen.svg)](CID201B_17.html)
 [![No Dependencies](https://img.shields.io/badge/dependencies-none-brightgreen.svg)]()
 [![Language](https://img.shields.io/badge/lang-ES-blue.svg)](#)
 [![Version](https://img.shields.io/badge/version-v0.17.0-blue.svg)](CID201B_17.html)
 [![Tests](https://img.shields.io/badge/tests-123%2F123-brightgreen.svg)](TEST/CID201B-tests.html)
-
 
 > Un homenaje ejecutable a una de las primeras computadoras diseñadas y fabricadas en América Latina, y a las personas que la concibieron, construyeron y programaron.
 
@@ -46,7 +44,7 @@ Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cub
 
 ## Inicio rápido
 
-No requiere instalación ni dependencias. Abre el archivo **`CID201B_17.html`** en un navegador moderno (Chrome, Firefox, Edge o Safari). La versión activa es `_17`; las versiones anteriores se conservan intactas en la carpeta del proyecto.
+No requiere instalación ni dependencias. Abre el archivo **`CIDmulatorCID201B.html`** en un navegador moderno (Chrome, Firefox, Edge o Safari). O ir a este vínculo: <https://maikelsz.github.io/CIDmulatorCID201B/CIDmulatorCID201BA.html>
 
 **Primeros pasos recomendados:**
 
