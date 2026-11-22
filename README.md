@@ -773,9 +773,9 @@ Si la máquina estaba ejecutando, el cargador la detiene primero con un alto `AD
 | 🗺️ | **Mapa de memoria** | Vista de los 32 Kpalabras por módulo y página |
 | 📖 | **Ayuda** | Manual de usuario interno con pestañas |
 
-Para programar fácilmente en LEN1 y LEAL, puede usar al editor/compialdor/ensamblador/ejecutor CIDcoder-A, disponible en este repositorio:
+Para programar fácilmente en LEN1 y LEAL, puede usar al editor/compilador/ensamblador/ejecutor CIDcoder-A, disponible en este repositorio: <https://github.com/maikelsz/CIDcoder-B/> . El compialdor LEAL situa al vector de arranque en la palabra 7776 del primer campo, asi que puede iniciarse por el botón "C".
 
-<https://github.com/maikelsz/CIDcoder-B/>
+
 
 El **mapa de memoria** permite navegar por módulos (`0`–`7`) y páginas (`00`–`31`), saltar al `CP`, saltar a la última instrucción y activar el **Seguimiento** automático. También permite **editar** las celdas:
 
