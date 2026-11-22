@@ -773,12 +773,16 @@ Si la máquina estaba ejecutando, el cargador la detiene primero con un alto `AD
 | 🗺️ | **Mapa de memoria** | Vista de los 32 Kpalabras por módulo y página |
 | 📖 | **Ayuda** | Manual de usuario interno con pestañas |
 
+Para programar fácilmente en LEN1 y LEAL, puede usar al editor/compialdor/ensamblador/ejecutor CIDcoder-A, disponible en este repositorio:
+
+<https://github.com/maikelsz/CIDcoder-B/>
+
 El **mapa de memoria** permite navegar por módulos (`0`–`7`) y páginas (`00`–`31`), saltar al `CP`, saltar a la última instrucción y activar el **Seguimiento** automático. También permite **editar** las celdas:
 
 - Un clic sobre el valor octal abre un campo de edición con el valor actual seleccionado.
 - Se aceptan de 1 a 4 dígitos del `0` al `7`. Un valor con `8`, `9` o más de cuatro dígitos se rechaza, se marca en rojo y no se escribe.
 - **Enter** guarda y pasa a la celda siguiente; **Tab** guarda y avanza; **Esc** cancela. Al llegar al final de un módulo, el editor pasa al módulo siguiente.
-- La máquina debe estar encendida con **CENTRAL**. Si está ejecutando, la edición la detiene en **ALTO DINÁMICO (`AD`)**.
+- La máquina debe estar encendida con **CENTRAL** encendido para que funcionen lo periféricos. Si está ejecutando, la edición la detiene en **ALTO DINÁMICO (`AD`)**.
 
 La **ayuda interna** está organizada en cinco pestañas: **Uso**, **Repertorio**, **Protección**, **UAB** y **Periféricos**. La pestaña **Uso** cubre el encendido, la ejecución, la carga manual, el cargador `.lstb`, el mapa de memoria y las demos. **Repertorio** reúne las tablas de instrucciones y microinstrucciones, con el direccionamiento indirecto corregido. **Protección** explica los patrones `CAMPO`/`ZONA` y el resumen `PROT/CAM/ZON` de la barra de estado. **UAB** documenta el bloque `65xx` y el Registro de Estado, con el aviso de que **no está implementado**. **Periféricos** describe el Consul, el Ricoh, el CODEC y los equipos históricos no simulados.
 
