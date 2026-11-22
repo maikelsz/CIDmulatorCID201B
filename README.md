@@ -90,7 +90,7 @@ El diseño comenzó hacia **1972** y la producción en serie arrancó en **1973*
 | Direccionamiento | Segmentado-paginado, con indirección, autoindexación y protección |
 | E/S | Unidad de Enlace con canales multiplexor y selector |
 | Sistemas operativos | SCP1, SCP2, SN2, SIDOP-201B, monitor con ensamblador, depurador y editor |
-| Software | LEAL, ENSIMACC, LALR1, ALGOL, FOCAL, BASIC, FORTRAN, COBOL, LEE, LINCO, LESICA, entre otros |
+| Software | LEAL, ENSIMACC, ALGOL, FOCAL, BASIC, FORTRAN, COBOL, LEE, LINCO, LESICA, entre otros |
 | Predecesora | CID 201-A |
 | Sucesora | CID 300/10 |
 
