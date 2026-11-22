@@ -62,7 +62,7 @@ No requiere instalación ni dependencias. Abre el archivo **`CID201B_17.html`** 
 |---|---|---|
 | **ENA** | `7775 = 0200` | *Shift*: rotación del acumulador |
 | **ENB** | `7776 = 0400` | *Hola Mundo*: impresión en bucle |
-| **ENC** | `7777 = 7600` | Monitor «Última Página» |
+| **ENC** | `7777 = 7600` | Monitor «Última Página» para la consola CODEC01B|
 
 Las teclas **ENA/ENB/ENC** del CODEC usan exactamente los mismos vectores.
 
