@@ -41,7 +41,6 @@ Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cub
 13. [Pruebas](#pruebas)
 14. [Notas técnicas](#notas-técnicas)
 15. [Referencias](#referencias)
-16. [Licencia y agradecimientos](#licencia-y-agradecimientos)
 
 ---
 
