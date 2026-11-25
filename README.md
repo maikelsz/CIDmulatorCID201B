@@ -81,7 +81,7 @@ El diseño comenzó hacia **1972** y la producción en serie arrancó en **1973*
 | Fabricación | 1973 – 1979 |
 | Unidades | Más de 200 (algunas fuentes: ~250) |
 | Longitud de palabra | 12 bits |
-| Reloj / velocidad | 100 000 ciclos/s; ~50 000 sumas (registro + memoria) por segundo |
+| Velocidad | 100 000 sumas/s |
 | Memoria | Hasta 32 Kpalabras en 8 módulos de ferrita de 4 Kpalabras |
 | Tecnología | DTL al inicio; después TTL de media escala de integración |
 | Direccionamiento | Segmentado-paginado, con indirección, autoindexación y protección |
