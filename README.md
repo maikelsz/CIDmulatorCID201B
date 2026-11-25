@@ -43,7 +43,7 @@ Simulador funcional, en un único archivo HTML/CSS/JS, de la minicomputadora cub
 
 ## Inicio rápido
 
-No requiere instalación ni dependencias. Abre el archivo **`CIDmulatorCID201B.html`** en un navegador moderno (Chrome, Firefox, Edge o Safari). O ir a este vínculo: <https://maikelsz.github.io/CIDmulatorCID201B/CIDmulatorCID201BA.html>
+No requiere instalación ni dependencias. Abre el archivo **`CIDmulatorCID201B.html`** en un navegador moderno (Chrome, Firefox, Edge o Safari). O ir a este vínculo: <https://maikelsz.github.io/CIDmulatorCID201B/CIDmulatorCID201B.html>
 
 **Primeros pasos recomendados:**
 
