@@ -850,6 +850,4 @@ El emulador es un **único archivo HTML autocontenido** y no usa frameworks ni d
 
 ### Agradecimientos
 
-A los ingenieros y técnicos del **Centro de Investigación Digital (CID)** de Cuba, que diseñaron, construyeron y programaron la CID 201-B entre 1972 y 1979, y a las personas que han preservado su documentación, sus fotografías y su memoria.
-
-A los autores de los emuladores y documentación de la familia CID 201, cuyo trabajo hizo posible reconstruir el repertorio, la consola y los periféricos de esta máquina.
+A los ingenieros y técnicos del **Centro de Investigación Digital (CID)** de Cuba, que diseñaron, construyeron y programaron la CID 201-B entre 1972 y 1979.
